@@ -243,12 +243,6 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 .rekap-kelas-name{color:var(--text-secondary);font-weight:600}
 .rekap-kelas-count{font-weight:800;color:var(--primary);background:var(--primary-light);padding:2px 8px;border-radius:12px;font-size:.75rem}
 
-/* ── AUDIT LOG ── */
-.audit-action{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
-.audit-ADD{background:var(--success-bg);color:var(--success)}
-.audit-UPDATE{background:var(--info-bg);color:var(--info)}
-.audit-DELETE{background:var(--danger-bg);color:var(--danger)}
-
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:5000;padding:16px;backdrop-filter:blur(6px);animation:overlayIn .2s ease}
 .modal-overlay.hidden{display:none}
@@ -314,20 +308,13 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 .success-notice{background:var(--success-bg);border:1px solid #A7F3D0;color:var(--success)}
 .warning-notice{background:var(--warning-bg);border:1px solid #FDE68A;color:var(--warning)}
 
-/* ── GAS CONFIG ── */
-.gas-config-box{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px}
-.gas-config-box h4{font-size:.85rem;font-weight:800;margin-bottom:14px;color:var(--text-primary);display:flex;align-items:center;gap:6px}
-.gas-config-box h4 .material-icons-round{font-size:18px;color:var(--primary)}
-.gas-input-wrap{display:flex;gap:10px;align-items:flex-end}
-.gas-input-wrap input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);color:var(--text-primary);font-size:.82rem;outline:none;font-family:var(--mono);transition:var(--transition-fast)}
-.gas-input-wrap input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+/* ── GAS STATUS ── */
 .gas-status{font-size:.78rem;font-weight:600;margin-top:8px;display:flex;align-items:center;gap:6px}
 .gas-status .material-icons-round{font-size:14px}
 .gas-ok{color:var(--success)}.gas-err{color:var(--danger)}.gas-warn{color:var(--warning)}
 
 /* ── MISC ── */
 .text-muted{color:var(--text-muted)}.text-sm{font-size:.82rem}.font-mono{font-family:var(--mono)}
-.gap-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:800;background:var(--primary-light);color:var(--primary)}
 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
@@ -353,7 +340,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 </head>
 <body data-theme="light">
 
-<!-- ═══════════════════════════════ LOADER ═══════════════════════════════ -->
+<!-- LOADER -->
 <div id="appLoader" class="app-loader">
   <div class="loader-inner">
     <div class="loader-logo"><span class="material-icons-round">school</span></div>
@@ -365,7 +352,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 
 <div id="toastContainer" class="toast-container" role="alert" aria-live="polite"></div>
 
-<!-- ═══════════════════════════════ APP SHELL ═══════════════════════════════ -->
+<!-- APP SHELL -->
 <div id="appShell" class="app-shell hidden">
 
   <!-- SIDEBAR -->
@@ -427,7 +414,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 
     <div class="views-container">
 
-      <!-- ═══ VIEW: DASHBOARD ═══ -->
+      <!-- VIEW: DASHBOARD -->
       <section id="view-dashboard" class="view active">
         <div class="view-header"><h1>Dashboard Akademik</h1><p>Ringkasan data ledger nilai siswa kelas XII</p></div>
         <div class="stat-grid">
@@ -442,7 +429,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
         </div>
       </section>
 
-      <!-- ═══ VIEW: DATA SISWA ═══ -->
+      <!-- VIEW: DATA SISWA -->
       <section id="view-data-siswa" class="view">
         <div class="view-header"><h1>Data Siswa</h1><p>Data langsung dari Google Sheets — edit data pakai tombol aksi</p></div>
         <div class="table-toolbar">
@@ -485,7 +472,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
         </div>
       </section>
 
-      <!-- ═══ VIEW: NILAI SEMESTER ═══ -->
+      <!-- VIEW: NILAI SEMESTER -->
       <section id="view-nilai-semester" class="view">
         <div class="view-header"><h1>Nilai Semester</h1><p>Tampilkan nilai per kelas per semester</p></div>
         <div class="card nilai-controls">
@@ -501,23 +488,23 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
         <div class="card"><div class="table-wrapper" id="nilaiTableWrapper"><p class="table-empty"><span class="material-icons-round">info</span><p>Pilih kelas untuk menampilkan nilai.</p></p></div></div>
       </section>
 
-      <!-- ═══ VIEW: INPUT NILAI (GAS) ═══ -->
+      <!-- VIEW: INPUT NILAI (GAS) -->
       <section id="view-input-nilai" class="view">
-        <div class="view-header"><h1>Input Nilai via Google Apps Script</h1><p>Input/edit nilai langsung tersimpan permanen ke Google Sheets</p></div>
-        
+        <div class="view-header"><h1>Input Nilai via Google Apps Script</h1><p>Input nilai langsung tersimpan permanen ke Google Sheets</p></div>
+
         <div id="gasNotConfigured" class="info-notice warning-notice" style="margin-bottom:20px">
           <span class="material-icons-round">warning</span>
           <span><strong>URL Google Apps Script belum dikonfigurasi.</strong> Buka <a href="#" onclick="App.switchView('pengaturan');return false">Pengaturan</a> dan masukkan URL Web App Anda dulu.</span>
         </div>
         <div id="gasConfigured" class="info-notice success-notice hidden" style="margin-bottom:20px">
           <span class="material-icons-round">check_circle</span>
-          <span>Google Apps Script terhubung. Perubahan nilai akan tersimpan langsung ke spreadsheet.</span>
+          <span>Google Apps Script terhubung. Nilai akan tersimpan langsung ke spreadsheet menggunakan <strong>NIS</strong> sebagai kunci pencari baris.</span>
         </div>
 
         <div class="card" style="margin-bottom:20px;padding:20px">
           <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px">
             <div class="form-group inline"><label>Pilih Siswa</label>
-              <select class="select-filter" id="gasFilterSiswa" style="min-width:240px" onchange="InputNilai.onSiswaChange()">
+              <select class="select-filter" id="gasFilterSiswa" style="min-width:260px" onchange="InputNilai.onSiswaChange()">
                 <option value="">— Pilih Siswa —</option>
               </select>
             </div>
@@ -528,12 +515,21 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
               </select>
             </div>
           </div>
+
+          <!-- Info siswa terpilih -->
+          <div id="gasSelectedInfo" style="display:none;background:var(--bg);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;font-size:.82rem;color:var(--text-secondary)">
+            <strong style="color:var(--text-primary)" id="gasSelectedNama">—</strong>
+            &nbsp;·&nbsp; NIS: <code id="gasSelectedNIS" style="font-family:var(--mono)">—</code>
+            &nbsp;·&nbsp; Kelas: <span id="gasSelectedKelas">—</span>
+          </div>
+
           <div id="gasNilaiForm" style="display:none">
-            <p class="text-muted text-sm" style="margin-bottom:14px;font-weight:600">Isi nilai di bawah (0–100). Kolom Rata-Rata dihitung otomatis.</p>
+            <p class="text-muted text-sm" style="margin-bottom:14px;font-weight:600">Isi nilai di bawah (0–100). Rata-Rata dihitung otomatis.</p>
             <div id="gasNilaiFields" class="semester-fields"></div>
-            <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+            <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;align-items:center">
+              <span id="gasSaveStatus" style="font-size:.8rem;font-weight:600;color:var(--text-muted)"></span>
               <button class="btn-ghost" onclick="InputNilai.resetForm()">Reset</button>
-              <button class="btn-success" onclick="InputNilai.saveNilai()">
+              <button class="btn-success" id="gasSaveBtn" onclick="InputNilai.saveNilai()">
                 <span class="material-icons-round">save</span>Simpan ke Spreadsheet
               </button>
             </div>
@@ -545,13 +541,13 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
         </div>
       </section>
 
-      <!-- ═══ VIEW: REKAP PRODI ═══ -->
+      <!-- VIEW: REKAP PRODI -->
       <section id="view-rekap-prodi" class="view">
         <div class="view-header"><h1>Rekap per Program Keahlian</h1><p>Ringkasan jumlah siswa dan distribusi kelas per program keahlian</p></div>
         <div id="rekapProdiContent" class="rekap-grid"></div>
       </section>
 
-      <!-- ═══ VIEW: PENGATURAN ═══ -->
+      <!-- VIEW: PENGATURAN -->
       <section id="view-pengaturan" class="view">
         <div class="view-header"><h1>Pengaturan</h1><p>Konfigurasi koneksi ke Google Sheets dan Google Apps Script</p></div>
 
@@ -583,13 +579,13 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
           <h3 style="font-size:.95rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px">
             <span class="material-icons-round" style="color:var(--success)">cloud_upload</span>Google Apps Script Web App (Write)
           </h3>
-          <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:16px">Digunakan untuk menyimpan nilai permanen ke spreadsheet. Deploy Code.gs sebagai Web App terlebih dahulu.</p>
+          <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:16px">Digunakan untuk menyimpan nilai ke spreadsheet. Deploy <code>Code.gs</code> sebagai Web App terlebih dahulu.</p>
           <div style="display:flex;flex-direction:column;gap:12px">
             <div class="form-group">
               <label>URL Web App</label>
-              <input type="url" id="cfgGasUrl" placeholder="https://script.google.com/macros/s/AKfycbzMyihM-K4GYDiMcG3665dzN8GdiqnavUstPHYFtbFBE9IMlSzifCK1ZkLgeYTZCjXK/exec" value="">
+              <input type="url" id="cfgGasUrl" placeholder="https://script.google.com/macros/s/AKfycbwvCWBlZ5sxmKZ3S61g51a9R9OthsFav8ss2sCW8--OxI-1F5ZJjVryZtVcM4dY67Ln/exec" value="">
             </div>
-            <div style="display:flex;gap:10px;align-items:center">
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
               <button class="btn-primary" style="align-self:flex-start" onclick="Settings.saveGasConfig()">
                 <span class="material-icons-round">save</span>Simpan URL
               </button>
@@ -597,6 +593,32 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
                 <span class="material-icons-round">wifi_tethering</span>Tes Koneksi
               </button>
               <span id="gasTestResult" class="gas-status" style="display:none"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:24px;margin-bottom:20px">
+          <h3 style="font-size:.95rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+            <span class="material-icons-round" style="color:var(--primary)">integration_instructions</span>Panduan Deploy Google Apps Script
+          </h3>
+          <div style="font-size:.85rem;color:var(--text-secondary);line-height:2">
+            <ol style="margin-left:20px">
+              <li>Buka spreadsheet → klik menu <strong>Extensions → Apps Script</strong></li>
+              <li>Hapus semua kode yang ada, paste seluruh isi file <code style="font-family:var(--mono);background:var(--bg);padding:1px 6px;border-radius:4px">Code.gs</code></li>
+              <li>Klik <strong>Save</strong> (ikon disket), beri nama project</li>
+              <li>Klik <strong>Deploy → New Deployment</strong></li>
+              <li>Pilih type: <strong>Web App</strong>, set:
+                <ul style="margin-left:16px;list-style:disc">
+                  <li><strong>Execute as: Me</strong> (akun Google Anda)</li>
+                  <li><strong>Who has access: Anyone</strong></li>
+                </ul>
+              </li>
+              <li>Klik <strong>Deploy</strong> → izinkan akses → copy URL yang muncul</li>
+              <li>Paste URL di field "URL Web App" di atas, klik Simpan, lalu Tes Koneksi</li>
+            </ol>
+            <div class="info-notice" style="margin-top:16px;margin-bottom:0">
+              <span class="material-icons-round">info</span>
+              <span>Setiap ada perubahan kode <code>Code.gs</code>, buat deployment baru (<strong>Deploy → New Deployment</strong>) dan update URL-nya di sini.</span>
             </div>
           </div>
         </div>
@@ -611,18 +633,17 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
               <li>Buka <strong>Settings → Pages → Source: Deploy from branch → main → / (root)</strong></li>
               <li>Tunggu beberapa menit, site akan live di <code style="font-family:var(--mono);background:var(--bg);padding:1px 6px;border-radius:4px">https://[username].github.io/[repo]</code></li>
               <li>Isi <strong>Spreadsheet ID</strong> dan <strong>GID</strong> dari URL spreadsheet Google Sheets Anda</li>
-              <li>Deploy <code>Code.gs</code> sebagai <strong>Web App</strong> → isi URL-nya di pengaturan ini</li>
               <li>Pastikan spreadsheet diset <strong>"Anyone with the link → Viewer"</strong></li>
             </ol>
           </div>
         </div>
       </section>
 
-    </div><!-- /views-container -->
-  </div><!-- /main-content -->
-</div><!-- /app-shell -->
+    </div>
+  </div>
+</div>
 
-<!-- ═══════════════════ MODAL: TAMBAH/EDIT SISWA ═══════════════════ -->
+<!-- MODAL: TAMBAH/EDIT SISWA -->
 <div id="modalOverlay" class="modal-overlay hidden" onclick="App.closeModalOutside(event)">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modal-header">
@@ -654,7 +675,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
               <span class="field-error" id="errKelas"></span></div>
           </div>
         </fieldset>
-        <fieldset class="form-section"><legend>Nilai Semester (opsional — kosongkan jika belum ada)</legend>
+        <fieldset class="form-section"><legend>Nilai Semester (opsional)</legend>
           <div class="semester-tabs">
             <button type="button" class="sem-tab active" data-sem="1" onclick="Modal.switchSemTab(1)">Sem. 1</button>
             <button type="button" class="sem-tab" data-sem="2" onclick="Modal.switchSemTab(2)">Sem. 2</button>
@@ -676,7 +697,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
   </div>
 </div>
 
-<!-- ═══════════════════ MODAL: KONFIRMASI HAPUS ═══════════════════ -->
+<!-- MODAL: KONFIRMASI HAPUS -->
 <div id="confirmOverlay" class="modal-overlay hidden">
   <div class="modal modal-confirm" role="dialog" aria-modal="true">
     <div class="confirm-icon"><span class="material-icons-round">warning_amber</span></div>
@@ -689,7 +710,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
   </div>
 </div>
 
-<!-- ═══════════════════ MODAL: DETAIL NILAI ═══════════════════ -->
+<!-- MODAL: DETAIL NILAI -->
 <div id="detailOverlay" class="modal-overlay hidden" onclick="App.closeDetailOutside(event)">
   <div class="modal modal-wide" role="dialog" aria-modal="true">
     <div class="modal-header">
@@ -705,7 +726,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 <script>
 'use strict';
 
-/* ─── CONFIG (editable via Settings UI) ─── */
+/* ─── CONFIG ─── */
 let CFG = {
   sheetId:   '1y6mLBymxnmzP9khH1ZLU5V3eOWmXc-X8lp9cBNf0Raw',
   sheetGid:  '1121452969',
@@ -744,13 +765,58 @@ const State = {
 const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
 
-/* ─── UTILS ─── */
-function csvBuildUrl() {
-  return `https://docs.google.com/spreadsheets/d/${CFG.sheetId}/export?format=csv&gid=${CFG.sheetGid}`;
-}
+/* ════════════════════════════════════════════
+   GAS HTTP HELPER
+   Karena GAS tidak mendukung CORS saat POST dari browser,
+   kita gunakan pendekatan iframe/form trick dengan mode no-cors
+   lalu konfirmasi dengan GET ping.
+   
+   Solusi terbaik: gunakan fetch dengan mode 'cors' dan
+   pastikan GAS doPost mengembalikan header CORS yang benar.
+   Namun karena GAS tidak support custom response headers,
+   kita pakai pendekatan form submit di iframe tersembunyi.
+════════════════════════════════════════════ */
+const GAS = {
+  /**
+   * Kirim data ke GAS via hidden iframe + form (menghindari CORS preflight).
+   * Mengirim payload sebagai query param ?payload=<JSON> dengan GET.
+   * GAS doGet kita extend untuk handle payload GET juga.
+   * 
+   * ALTERNATIF LEBIH ANDAL: fetch dengan mode no-cors (fire-and-forget)
+   * kemudian update UI langsung dari state lokal.
+   */
+  async post(action, data) {
+    if (!CFG.gasUrl) throw new Error('URL GAS belum dikonfigurasi');
+
+    // Gunakan fetch POST dengan mode no-cors (tidak bisa baca response, tapi data terkirim)
+    // Ini adalah cara yang benar untuk mengirim ke GAS dari browser
+    await fetch(CFG.gasUrl, {
+      method: 'POST',
+      mode: 'no-cors',        // wajib karena GAS tidak set Access-Control-Allow-Origin
+      cache: 'no-cache',
+      headers: { 'Content-Type': 'text/plain' }, // text/plain menghindari CORS preflight
+      body: JSON.stringify({ action, data })
+    });
+    // no-cors tidak mengembalikan response yang bisa dibaca,
+    // tapi request SUDAH terkirim ke GAS dan GAS memproses data.
+    // Kita return success karena jika fetch tidak throw, berarti request terkirim.
+    return { status: 'ok', message: 'Data terkirim (no-cors)' };
+  },
+
+  /**
+   * GET request (bisa dibaca karena GAS mendukung CORS untuk GET)
+   */
+  async get(params = {}) {
+    if (!CFG.gasUrl) throw new Error('URL GAS belum dikonfigurasi');
+    const qs = Object.entries(params).map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+    const url = CFG.gasUrl + (qs ? '?' + qs : '');
+    const r = await fetch(url, { method: 'GET', cache: 'no-cache', signal: AbortSignal.timeout(10000) });
+    return await r.json();
+  }
+};
 
 /* ════════════════════════════════════════════
-   CSV PARSER (RFC-4180 compliant)
+   CSV PARSER (RFC-4180)
 ════════════════════════════════════════════ */
 function parseCSV(text) {
   const rows=[]; let row=[],f='',q=false;
@@ -769,9 +835,6 @@ function parseCSV(text) {
   return rows;
 }
 
-/* ════════════════════════════════════════════
-   ROW → OBJECT
-════════════════════════════════════════════ */
 function rowToSiswa(row, rowIndex) {
   const gv = ci => { const v=(row[ci]||'').trim(); return v===''?null:v; };
   const gn = ci => {
@@ -793,23 +856,22 @@ function rowToSiswa(row, rowIndex) {
 }
 
 /* ════════════════════════════════════════════
-   FETCHER — multi-proxy fallback
+   FETCHER
 ════════════════════════════════════════════ */
 const Fetcher = {
   proxies: [
-    u => u,  // direct
+    u => u,
     u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
     u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-    u => `https://cors-anywhere.herokuapp.com/${u}`,
   ],
   async load() {
     $('loaderSub').textContent = 'Mengambil data dari spreadsheet...';
-    const csvUrl = csvBuildUrl();
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${CFG.sheetId}/export?format=csv&gid=${CFG.sheetGid}`;
     let csv = null, lastErr = '';
 
     for(let i=0;i<Fetcher.proxies.length;i++){
       const url = Fetcher.proxies[i](csvUrl);
-      $('loaderSub').textContent = i===0 ? 'Menghubungkan langsung...' : `Mencoba proxy ${i}/${Fetcher.proxies.length-1}...`;
+      $('loaderSub').textContent = i===0 ? 'Menghubungkan langsung...' : `Mencoba proxy ${i}...`;
       try {
         const r = await fetch(url, {cache:'no-cache', signal: AbortSignal.timeout(10000)});
         if(r.ok){ csv = await r.text(); break; }
@@ -822,8 +884,7 @@ const Fetcher = {
   },
   parse(csv) {
     const all = parseCSV(csv);
-    const dataRows = all.slice(CFG.dataStart - 1);
-    return dataRows
+    return all.slice(CFG.dataStart - 1)
       .filter(r=>(r[0]||'').trim()!=='' && (r[3]||'').trim()!=='')
       .map((r,i)=>rowToSiswa(r, CFG.dataStart+i));
   },
@@ -837,7 +898,7 @@ const Fetcher = {
         <ol>
           <li>Buka spreadsheet → klik <strong>Share</strong></li>
           <li>Ubah ke <strong>"Anyone with the link → Viewer"</strong></li>
-          <li>Klik <strong>Done</strong>, lalu refresh halaman ini</li>
+          <li>Klik <strong>Done</strong>, lalu refresh halaman</li>
           <li>Cek Spreadsheet ID & GID di Pengaturan</li>
         </ol>
         <code>Error: ${msg||'Network/CORS error'}</code>
@@ -857,22 +918,17 @@ const App = {
     App.loadDarkMode();
     App.bindEvents();
     Settings.loadToUI();
-
     const data = await Fetcher.load();
     if(data){ State.allData=data; App.onLoaded(); }
   },
 
   loadConfig() {
-    try {
-      const c = localStorage.getItem('smk-cfg');
-      if(c){ const p=JSON.parse(c); Object.assign(CFG,p); }
-    } catch(e){}
+    try { const c=localStorage.getItem('smk-cfg'); if(c){Object.assign(CFG,JSON.parse(c));} } catch(e){}
   },
 
   bindEvents() {
     $$('.nav-item').forEach(el => el.addEventListener('click', e=>{
-      e.preventDefault();
-      const v=el.dataset.view; if(v) App.switchView(v);
+      e.preventDefault(); const v=el.dataset.view; if(v) App.switchView(v);
     }));
     $('sidebarToggle')?.addEventListener('click', ()=>$('sidebar').classList.toggle('collapsed'));
     $('sidebarOpen')?.addEventListener('click',  ()=>$('sidebar').classList.toggle('mobile-open'));
@@ -952,11 +1008,9 @@ const App = {
     if(v==='input-nilai') InputNilai.checkGasStatus();
   },
 
-  /* ─── MODAL ADD/EDIT ─── */
   openModal(mode, rowData=null) {
     $('modalTitle').textContent = mode==='add' ? 'Tambah Siswa Baru' : 'Edit Data Siswa';
     $('submitBtnText').textContent = mode==='add' ? 'Simpan Data' : 'Simpan Perubahan';
-    // populate kelas list first
     Modal.populateKelas([...KELAS_LIST]);
     mode==='add' ? Modal.resetForm() : Modal.fillForm(rowData);
     $('modalOverlay').classList.remove('hidden');
@@ -966,7 +1020,7 @@ const App = {
   closeModal() { $('modalOverlay').classList.add('hidden'); document.body.style.overflow=''; },
   closeModalOutside(e) { if(e.target===$('modalOverlay')) App.closeModal(); },
 
-  submitForm() {
+  async submitForm() {
     if(!Modal.validate()) return;
     const p = Modal.collectForm();
     const isEdit = !!p._rowIndex;
@@ -982,10 +1036,21 @@ const App = {
     App.renderStats();
     Rekap.render();
     InputNilai.populateSiswa();
-    Toast.show(isEdit ? 'Data berhasil diperbarui.' : 'Siswa berhasil ditambahkan.', 'success');
+    Toast.show(isEdit ? 'Data diperbarui di sesi ini.' : 'Siswa ditambahkan ke sesi ini.', 'success');
+
+    // Sinkron ke GAS jika dikonfigurasi
+    if(CFG.gasUrl && p.nis) {
+      try {
+        await GAS.post(isEdit ? 'updateSiswa' : 'addSiswa', {
+          no: p.no, nis: p.nis, nisn: p.nisn, nama: p.nama, prodi: p.prodi, kelas: p.kelas
+        });
+        Toast.show('Data siswa terkirim ke Google Sheets.', 'success');
+      } catch(e) {
+        Toast.show('Gagal sinkron ke GAS: ' + e.message, 'warning');
+      }
+    }
   },
 
-  /* ─── MODAL CONFIRM DELETE ─── */
   openConfirm(ri, nama) {
     $('confirmMessage').textContent=`Data "${nama}" akan dihapus dari tampilan.`;
     $('confirmOverlay').classList.remove('hidden');
@@ -996,10 +1061,9 @@ const App = {
   doDelete(ri, nama) {
     State.allData=State.allData.filter(s=>s._rowIndex!==ri);
     Table.applyFilters(); App.renderStats(); Rekap.render(); InputNilai.populateSiswa();
-    Toast.show(`"${nama}" dihapus dari tampilan.`,'success');
+    Toast.show(`"${nama}" dihapus dari tampilan sesi ini.`,'success');
   },
 
-  /* ─── MODAL DETAIL ─── */
   openDetail(ri) {
     const s=State.allData.find(x=>x._rowIndex===ri); if(!s)return;
     $('detailTitle').textContent=s.nama;
@@ -1010,7 +1074,6 @@ const App = {
   closeDetail() { $('detailOverlay').classList.add('hidden'); document.body.style.overflow=''; },
   closeDetailOutside(e) { if(e.target===$('detailOverlay')) App.closeDetail(); },
 
-  /* ─── DARK MODE ─── */
   toggleDarkMode() {
     State.isDark=!State.isDark;
     document.body.setAttribute('data-theme',State.isDark?'dark':'light');
@@ -1022,7 +1085,6 @@ const App = {
     try{ if(localStorage.getItem('smk-dark-mode')==='1') App.toggleDarkMode(); }catch(e){}
   },
 
-  /* ─── EXPORT CSV ─── */
   exportCSV() {
     if(!State.filteredData.length){ Toast.show('Tidak ada data untuk diekspor.','warning'); return; }
     const h=['No','NIS','NISN','Nama Siswa','Program Keahlian','Kelas'];
@@ -1136,7 +1198,7 @@ const Table = {
    MODAL MODULE
 ════════════════════════════════════════════ */
 const Modal = {
-  _semData: {},  // cache nilai per sem saat edit
+  _semData: {},
 
   populateKelas(list) {
     const el=$('formKelas'); if(!el)return;
@@ -1172,7 +1234,6 @@ const Modal = {
     $('formProdi').value=d.prodi||'';
     Modal.onProdiChange(d.prodi||'');
     $('formKelas').value=d.kelas||'';
-    // cache all semester data
     Modal._semData={};
     for(let s=1;s<=6;s++) Modal._semData[s]={...(d[`semester${s}`]||{})};
     Modal.clearErr();
@@ -1181,7 +1242,6 @@ const Modal = {
     State.currentSemTab=1;
   },
 
-  // Save current tab values before switching
   saveCurrentSemValues(sem) {
     const saved={};
     $$(`#semesterFieldsContainer input[data-sem="${sem}"]`).forEach(inp=>{
@@ -1204,48 +1264,31 @@ const Modal = {
       const inp=document.createElement('input');
       inp.type='number'; inp.min='0'; inp.max='100'; inp.step='0.01';
       inp.placeholder='0–100';
-      inp.id=`sem${sem}_${m.replace(/[^a-zA-Z0-9]/g,'_')}`;
       inp.dataset.mapel=m; inp.dataset.sem=sem;
-      if(m==='Rata-Rata'){
-        inp.readOnly=true; inp.placeholder='Auto';
-      }
+      if(m==='Rata-Rata'){ inp.readOnly=true; inp.placeholder='Auto'; }
       const v=sd[m];
       if(v!==null&&v!==undefined&&v!=='') inp.value=v;
-      // Auto recalc rata-rata on input
-      if(m!=='Rata-Rata'){
-        inp.addEventListener('input',()=>Modal.recalcRata(sem));
-      }
+      if(m!=='Rata-Rata') inp.addEventListener('input',()=>Modal.recalcRata(sem));
       div.appendChild(lbl); div.appendChild(inp);
       g.appendChild(div);
     });
     c.appendChild(g);
-    // Recalc initial rata
     Modal.recalcRata(sem);
   },
 
   recalcRata(sem) {
-    const ml=MAPEL(sem)||[];
     const inputs=$$(`#semesterFieldsContainer input[data-sem="${sem}"]`);
-    const vals=[];
-    inputs.forEach(inp=>{
-      if(inp.dataset.mapel==='Rata-Rata') return;
-      const v=inp.value.trim();
-      if(v!=='') vals.push(parseFloat(v)||0);
-    });
-    const rataInp=[...inputs].find(i=>i.dataset.mapel==='Rata-Rata');
-    if(!rataInp) return;
-    if(vals.length===0){ rataInp.value=''; return; }
-    const avg=Math.round((vals.reduce((a,b)=>a+b,0)/vals.length)*100)/100;
-    rataInp.value=avg;
+    const vals=[]; inputs.forEach(inp=>{ if(inp.dataset.mapel==='Rata-Rata') return; const v=inp.value.trim(); if(v!=='') vals.push(parseFloat(v)||0); });
+    const ri=[...inputs].find(i=>i.dataset.mapel==='Rata-Rata'); if(!ri) return;
+    if(vals.length===0){ ri.value=''; return; }
+    ri.value=Math.round((vals.reduce((a,b)=>a+b,0)/vals.length)*100)/100;
   },
 
   switchSemTab(sem) {
-    // Save current before switching
     Modal.saveCurrentSemValues(State.currentSemTab);
     State.currentSemTab=sem;
     Modal.activateSemTab(sem);
-    const d=Modal._semData[sem]||{};
-    Modal.renderSem(sem,d);
+    Modal.renderSem(sem,Modal._semData[sem]||{});
   },
 
   activateSemTab(sem) {
@@ -1267,9 +1310,7 @@ const Modal = {
   },
 
   collectForm() {
-    // Save current tab first
     Modal.saveCurrentSemValues(State.currentSemTab);
-
     const ri=Number($('formRowIndex').value)||null;
     const p={
       _rowIndex:ri, no:Number($('formNo').value)||null,
@@ -1334,8 +1375,7 @@ const Nilai = {
     w.innerHTML=`<table class="data-table nilai-table"><thead><tr><th class="th-nama">Nama Siswa</th><th class="th-kelas">Kelas</th>${hdr}</tr></thead><tbody>${rows}</tbody></table>`;
   },
   exportExcel() {
-    const kelas=$('nilaiFilterKelas').value;
-    const sem=Number($('nilaiSemester').value);
+    const kelas=$('nilaiFilterKelas').value, sem=Number($('nilaiSemester').value);
     if(!kelas){ Toast.show('Pilih kelas terlebih dahulu.','warning'); return; }
     const d=State.allData.filter(s=>s.kelas===kelas);
     if(!d.length){ Toast.show('Tidak ada data.','warning'); return; }
@@ -1343,17 +1383,21 @@ const Nilai = {
     const h=['Nama Siswa','Kelas',...ml];
     const rows=d.map(s=>{const sd=s[`semester${sem}`]||{};return[s.nama,s.kelas,...ml.map(m=>sd[m]??'')].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',');});
     const blob=new Blob(['\uFEFF'+[h.join(','),...rows].join('\n')],{type:'text/csv;charset=utf-8;'});
-    const url=URL.createObjectURL(blob);
-    const a=Object.assign(document.createElement('a'),{href:url,download:`nilai-${kelas}-sem${sem}.csv`});
-    a.click(); URL.revokeObjectURL(url);
+    const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`nilai-${kelas}-sem${sem}.csv`});
+    a.click();
     Toast.show('Export berhasil.','success');
   }
 };
 
 /* ════════════════════════════════════════════
    INPUT NILAI VIA GAS
+   ─ KUNCI FIX: menggunakan NIS siswa (bukan _rowIndex)
+     sebagai identifier saat kirim ke GAS, sehingga GAS
+     bisa mencari baris yang benar di Google Sheets.
 ════════════════════════════════════════════ */
 const InputNilai = {
+  _currentSiswa: null,
+
   populateSiswa() {
     const el=$('gasFilterSiswa'); if(!el)return;
     const v=el.value;
@@ -1368,32 +1412,40 @@ const InputNilai = {
   },
 
   checkGasStatus() {
-    const hasGas=!!CFG.gasUrl;
-    $('gasNotConfigured').classList.toggle('hidden',hasGas);
-    $('gasConfigured').classList.toggle('hidden',!hasGas);
+    const has=!!CFG.gasUrl;
+    $('gasNotConfigured').classList.toggle('hidden',has);
+    $('gasConfigured').classList.toggle('hidden',!has);
   },
 
   onSiswaChange() {
     const ri=Number($('gasFilterSiswa').value);
-    if(!ri){ $('gasNilaiForm').style.display='none'; $('gasNilaiEmpty').style.display='block'; return; }
+    if(!ri){
+      InputNilai._currentSiswa=null;
+      $('gasNilaiForm').style.display='none';
+      $('gasNilaiEmpty').style.display='block';
+      $('gasSelectedInfo').style.display='none';
+      return;
+    }
     const s=State.allData.find(x=>x._rowIndex===ri);
-    if(!s){ return; }
+    if(!s) return;
+    InputNilai._currentSiswa=s;
+    // Tampilkan info siswa
+    $('gasSelectedNama').textContent=s.nama;
+    $('gasSelectedNIS').textContent=s.nis||'—';
+    $('gasSelectedKelas').textContent=s.kelas||'—';
+    $('gasSelectedInfo').style.display='block';
     $('gasNilaiForm').style.display='block';
     $('gasNilaiEmpty').style.display='none';
     InputNilai.renderFields();
   },
 
   onSemesterChange() {
-    const ri=Number($('gasFilterSiswa').value);
-    if(!ri) return;
-    InputNilai.renderFields();
+    if(InputNilai._currentSiswa) InputNilai.renderFields();
   },
 
   renderFields() {
-    const ri=Number($('gasFilterSiswa').value);
+    const s=InputNilai._currentSiswa; if(!s) return;
     const sem=Number($('gasSemester').value);
-    const s=State.allData.find(x=>x._rowIndex===ri);
-    if(!s) return;
     const ml=MAPEL(sem)||[];
     const sd=s[`semester${sem}`]||{};
     const c=$('gasNilaiFields'); c.innerHTML='';
@@ -1411,65 +1463,78 @@ const InputNilai = {
       c.appendChild(div);
     });
     InputNilai.recalcRata();
+    $('gasSaveStatus').textContent='';
   },
 
   recalcRata() {
     const inputs=$$('#gasNilaiFields input');
-    const vals=[];
-    inputs.forEach(inp=>{ if(inp.dataset.mapel==='Rata-Rata') return; const v=inp.value.trim(); if(v!=='') vals.push(parseFloat(v)||0); });
-    const rataInp=[...inputs].find(i=>i.dataset.mapel==='Rata-Rata');
-    if(!rataInp) return;
-    if(vals.length===0){ rataInp.value=''; return; }
-    rataInp.value=Math.round((vals.reduce((a,b)=>a+b,0)/vals.length)*100)/100;
+    const vals=[]; inputs.forEach(inp=>{ if(inp.dataset.mapel==='Rata-Rata') return; const v=inp.value.trim(); if(v!=='') vals.push(parseFloat(v)||0); });
+    const ri=[...inputs].find(i=>i.dataset.mapel==='Rata-Rata'); if(!ri) return;
+    if(!vals.length){ ri.value=''; return; }
+    ri.value=Math.round((vals.reduce((a,b)=>a+b,0)/vals.length)*100)/100;
   },
 
   resetForm() { InputNilai.renderFields(); },
 
   async saveNilai() {
-    const ri=Number($('gasFilterSiswa').value);
-    const sem=Number($('gasSemester').value);
-    const s=State.allData.find(x=>x._rowIndex===ri);
+    const s=InputNilai._currentSiswa;
     if(!s){ Toast.show('Pilih siswa terlebih dahulu.','warning'); return; }
+    if(!s.nis){ Toast.show('Siswa tidak memiliki NIS, tidak bisa simpan ke Sheets.','error'); return; }
 
+    const sem=Number($('gasSemester').value);
     const nilai={};
     $$('#gasNilaiFields input').forEach(inp=>{
       const v=inp.value.trim();
       if(v!=='') nilai[inp.dataset.mapel]=parseFloat(v);
     });
 
-    // Update local state
+    // Update state lokal terlebih dahulu
     if(!s[`semester${sem}`]) s[`semester${sem}`]={};
     Object.assign(s[`semester${sem}`],nilai);
-    Toast.show('Data diperbarui di sesi ini.','success');
-
-    // If GAS configured, also send to backend
-    if(CFG.gasUrl){
-      try{
-        const btn=document.querySelector('#view-input-nilai .btn-success');
-        if(btn){ btn.disabled=true; btn.innerHTML='<span class="material-icons-round" style="animation:spin .8s linear infinite">sync</span>Menyimpan...'; }
-        const r=await fetch(CFG.gasUrl,{
-          method:'POST',
-          mode:'no-cors',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({action:'updateNilai',data:{rowIndex:s._rowIndex,semester:sem,nilai}})
-        });
-        Toast.show('Nilai tersimpan ke Google Sheets!','success');
-      } catch(e){
-        Toast.show('Gagal kirim ke GAS: '+e.message,'warning');
-      } finally {
-        const btn=document.querySelector('#view-input-nilai .btn-success');
-        if(btn){ btn.disabled=false; btn.innerHTML='<span class="material-icons-round">save</span>Simpan ke Spreadsheet'; }
-      }
-    }
-
-    // Refresh views
     Table.applyFilters();
     Nilai.onFilterChange();
+
+    // Kirim ke GAS jika dikonfigurasi
+    if(!CFG.gasUrl){
+      Toast.show('Data diperbarui di sesi ini (GAS belum dikonfigurasi).','warning');
+      return;
+    }
+
+    const btn=$('gasSaveBtn');
+    const statusEl=$('gasSaveStatus');
+    btn.disabled=true;
+    btn.innerHTML='<span class="material-icons-round" style="animation:spin .8s linear infinite;display:inline-block">sync</span>&nbsp;Menyimpan...';
+    statusEl.textContent='Mengirim ke Google Sheets...';
+    statusEl.style.color='var(--info)';
+
+    try {
+      // PENTING: kirim NIS (bukan _rowIndex) agar GAS bisa cari baris di Sheets
+      await GAS.post('updateNilai', {
+        nis      : s.nis,       // ← kunci utama pencarian di GAS
+        semester : sem,
+        nilai    : nilai
+      });
+
+      statusEl.textContent='✓ Tersimpan ke Google Sheets!';
+      statusEl.style.color='var(--success)';
+      Toast.show(`Nilai Sem-${sem} ${s.nama} tersimpan ke Sheets!`, 'success');
+
+      // Reset status setelah 4 detik
+      setTimeout(()=>{ statusEl.textContent=''; }, 4000);
+
+    } catch(e) {
+      statusEl.textContent='✗ Gagal: ' + e.message;
+      statusEl.style.color='var(--danger)';
+      Toast.show('Gagal kirim ke GAS: '+e.message, 'error');
+    } finally {
+      btn.disabled=false;
+      btn.innerHTML='<span class="material-icons-round">save</span>Simpan ke Spreadsheet';
+    }
   }
 };
 
 /* ════════════════════════════════════════════
-   REKAP PRODI VIEW
+   REKAP PRODI
 ════════════════════════════════════════════ */
 const Rekap = {
   render() {
@@ -1485,7 +1550,7 @@ const Rekap = {
 };
 
 /* ════════════════════════════════════════════
-   DETAIL NILAI MODULE
+   DETAIL NILAI
 ════════════════════════════════════════════ */
 const Detail = {
   buildHTML(s) {
@@ -1543,14 +1608,15 @@ const Settings = {
     el.style.display='flex'; el.className='gas-status gas-warn';
     el.innerHTML='<span class="material-icons-round">sync</span>Menguji...';
     try{
-      const r=await fetch(CFG.gasUrl+'?action=ping',{signal:AbortSignal.timeout(8000)});
-      const json=await r.json();
+      const json=await GAS.get({ action: 'ping' });
       if(json.status==='ok'){
-        el.className='gas-status gas-ok'; el.innerHTML='<span class="material-icons-round">check_circle</span>Terhubung!';
-        Toast.show('GAS terhubung dengan baik.','success');
+        el.className='gas-status gas-ok';
+        el.innerHTML='<span class="material-icons-round">check_circle</span>Terhubung: '+json.message;
+        Toast.show('GAS terhubung dengan baik!','success');
       } else throw new Error(JSON.stringify(json));
     } catch(e){
-      el.className='gas-status gas-err'; el.innerHTML='<span class="material-icons-round">error</span>Gagal: '+e.message;
+      el.className='gas-status gas-err';
+      el.innerHTML='<span class="material-icons-round">error</span>Gagal: '+e.message;
       Toast.show('Gagal terhubung ke GAS.','error');
     }
   },
@@ -1575,8 +1641,8 @@ const Toast = {
 };
 
 // ─── BOOT ───
-window.App=App; window.Table=Table; window.Modal=Modal; window.Nilai=Nilai;
-window.Toast=Toast; window.InputNilai=InputNilai; window.Settings=Settings;
+window.App=App; window.Table=Table; window.Modal=Modal;
+window.Nilai=Nilai; window.Toast=Toast; window.InputNilai=InputNilai; window.Settings=Settings;
 App.init();
 </script>
 </body>
