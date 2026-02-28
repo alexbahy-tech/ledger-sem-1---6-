@@ -516,7 +516,6 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
             </div>
           </div>
 
-          <!-- Info siswa terpilih -->
           <div id="gasSelectedInfo" style="display:none;background:var(--bg);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;font-size:.82rem;color:var(--text-secondary)">
             <strong style="color:var(--text-primary)" id="gasSelectedNama">—</strong>
             &nbsp;·&nbsp; NIS: <code id="gasSelectedNIS" style="font-family:var(--mono)">—</code>
@@ -583,7 +582,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
           <div style="display:flex;flex-direction:column;gap:12px">
             <div class="form-group">
               <label>URL Web App</label>
-              <input type="url" id="cfgGasUrl" placeholder="https://script.google.com/macros/s/AKfycbwvCWBlZ5sxmKZ3S61g51a9R9OthsFav8ss2sCW8--OxI-1F5ZJjVryZtVcM4dY67Ln/exec" value="">
+              <input type="url" id="cfgGasUrl" placeholder="https://script.google.com/macros/s/AKfycbwHZ5w0CMK-a2HZ5nng_jNcPSesBQ5xVeJjEMuKzLSQgJzj5PoMx3OQuoCVbiE47hXQ/exec" value="">
             </div>
             <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
               <button class="btn-primary" style="align-self:flex-start" onclick="Settings.saveGasConfig()">
@@ -616,9 +615,9 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
               <li>Klik <strong>Deploy</strong> → izinkan akses → copy URL yang muncul</li>
               <li>Paste URL di field "URL Web App" di atas, klik Simpan, lalu Tes Koneksi</li>
             </ol>
-            <div class="info-notice" style="margin-top:16px;margin-bottom:0">
+            <div class="info-notice" style="margin-top:16px;margin-bottom:0;border-color:#BAE6FD">
               <span class="material-icons-round">info</span>
-              <span>Setiap ada perubahan kode <code>Code.gs</code>, buat deployment baru (<strong>Deploy → New Deployment</strong>) dan update URL-nya di sini.</span>
+              <span>⚠️ <strong>PENTING:</strong> Setiap ada perubahan kode <code>Code.gs</code>, buat deployment baru (<strong>Deploy → New Deployment</strong>) dan update URL-nya di sini. "Redeploy" tidak cukup.</span>
             </div>
           </div>
         </div>
@@ -766,51 +765,54 @@ const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
 
 /* ════════════════════════════════════════════
-   GAS HTTP HELPER
-   Karena GAS tidak mendukung CORS saat POST dari browser,
-   kita gunakan pendekatan iframe/form trick dengan mode no-cors
-   lalu konfirmasi dengan GET ping.
+   ✅ FIX UTAMA: GAS HTTP HELPER
    
-   Solusi terbaik: gunakan fetch dengan mode 'cors' dan
-   pastikan GAS doPost mengembalikan header CORS yang benar.
-   Namun karena GAS tidak support custom response headers,
-   kita pakai pendekatan form submit di iframe tersembunyi.
+   MASALAH LAMA:
+   - fetch POST dengan mode:'no-cors' → data terkirim tapi GAS tidak
+     bisa membaca body karena content-type tidak diteruskan dengan benar.
+   - Browser otomatis block CORS preflight untuk POST ke GAS karena
+     GAS tidak mengembalikan header Access-Control-Allow-Origin.
+   
+   SOLUSI:
+   - Semua request ke GAS menggunakan GET dengan ?action=xxx&payload=<JSON>
+   - GAS doGet sudah support CORS secara native untuk GET request
+   - Payload diencode sebagai encodeURIComponent(JSON.stringify(data))
+   - Response bisa dibaca langsung karena tidak ada CORS block untuk GET
 ════════════════════════════════════════════ */
 const GAS = {
   /**
-   * Kirim data ke GAS via hidden iframe + form (menghindari CORS preflight).
-   * Mengirim payload sebagai query param ?payload=<JSON> dengan GET.
-   * GAS doGet kita extend untuk handle payload GET juga.
-   * 
-   * ALTERNATIF LEBIH ANDAL: fetch dengan mode no-cors (fire-and-forget)
-   * kemudian update UI langsung dari state lokal.
+   * ✅ Kirim data ke GAS via GET request + query params
+   * Ini solusi resmi yang benar-benar bisa dibaca GAS dari browser.
+   * doGet di Code.gs sudah dikonfigurasi untuk menangani payload param.
    */
-  async post(action, data) {
+  async send(action, data) {
     if (!CFG.gasUrl) throw new Error('URL GAS belum dikonfigurasi');
 
-    // Gunakan fetch POST dengan mode no-cors (tidak bisa baca response, tapi data terkirim)
-    // Ini adalah cara yang benar untuk mengirim ke GAS dari browser
-    await fetch(CFG.gasUrl, {
-      method: 'POST',
-      mode: 'no-cors',        // wajib karena GAS tidak set Access-Control-Allow-Origin
-      cache: 'no-cache',
-      headers: { 'Content-Type': 'text/plain' }, // text/plain menghindari CORS preflight
-      body: JSON.stringify({ action, data })
+    const payload = encodeURIComponent(JSON.stringify(data));
+    const url     = `${CFG.gasUrl}?action=${encodeURIComponent(action)}&payload=${payload}`;
+
+    const r = await fetch(url, {
+      method: 'GET',
+      cache:  'no-cache',
+      signal: AbortSignal.timeout(30000) // GAS kadang lambat, beri 30 detik
     });
-    // no-cors tidak mengembalikan response yang bisa dibaca,
-    // tapi request SUDAH terkirim ke GAS dan GAS memproses data.
-    // Kita return success karena jika fetch tidak throw, berarti request terkirim.
-    return { status: 'ok', message: 'Data terkirim (no-cors)' };
+
+    if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+
+    const json = await r.json();
+    if (json.status === 'error') throw new Error(json.message || 'GAS error');
+    return json;
   },
 
   /**
-   * GET request (bisa dibaca karena GAS mendukung CORS untuk GET)
+   * GET request untuk ping / ambil data
    */
   async get(params = {}) {
     if (!CFG.gasUrl) throw new Error('URL GAS belum dikonfigurasi');
-    const qs = Object.entries(params).map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+    const qs  = Object.entries(params).map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join('&');
     const url = CFG.gasUrl + (qs ? '?' + qs : '');
-    const r = await fetch(url, { method: 'GET', cache: 'no-cache', signal: AbortSignal.timeout(10000) });
+    const r   = await fetch(url, { method:'GET', cache:'no-cache', signal: AbortSignal.timeout(15000) });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return await r.json();
   }
 };
@@ -1038,15 +1040,15 @@ const App = {
     InputNilai.populateSiswa();
     Toast.show(isEdit ? 'Data diperbarui di sesi ini.' : 'Siswa ditambahkan ke sesi ini.', 'success');
 
-    // Sinkron ke GAS jika dikonfigurasi
+    // Sinkron ke GAS jika dikonfigurasi — ✅ menggunakan GAS.send (GET + payload)
     if(CFG.gasUrl && p.nis) {
       try {
-        await GAS.post(isEdit ? 'updateSiswa' : 'addSiswa', {
+        const result = await GAS.send(isEdit ? 'updateSiswa' : 'addSiswa', {
           no: p.no, nis: p.nis, nisn: p.nisn, nama: p.nama, prodi: p.prodi, kelas: p.kelas
         });
-        Toast.show('Data siswa terkirim ke Google Sheets.', 'success');
+        Toast.show('✓ ' + (result.message || 'Data siswa tersimpan ke Google Sheets!'), 'success');
       } catch(e) {
-        Toast.show('Gagal sinkron ke GAS: ' + e.message, 'warning');
+        Toast.show('⚠️ Gagal sinkron ke GAS: ' + e.message, 'warning');
       }
     }
   },
@@ -1391,9 +1393,7 @@ const Nilai = {
 
 /* ════════════════════════════════════════════
    INPUT NILAI VIA GAS
-   ─ KUNCI FIX: menggunakan NIS siswa (bukan _rowIndex)
-     sebagai identifier saat kirim ke GAS, sehingga GAS
-     bisa mencari baris yang benar di Google Sheets.
+   ✅ FIX: Menggunakan GAS.send() (GET + payload) bukan POST
 ════════════════════════════════════════════ */
 const InputNilai = {
   _currentSiswa: null,
@@ -1429,7 +1429,6 @@ const InputNilai = {
     const s=State.allData.find(x=>x._rowIndex===ri);
     if(!s) return;
     InputNilai._currentSiswa=s;
-    // Tampilkan info siswa
     $('gasSelectedNama').textContent=s.nama;
     $('gasSelectedNIS').textContent=s.nis||'—';
     $('gasSelectedKelas').textContent=s.kelas||'—';
@@ -1488,6 +1487,13 @@ const InputNilai = {
       if(v!=='') nilai[inp.dataset.mapel]=parseFloat(v);
     });
 
+    // Validasi: minimal ada 1 nilai yang diisi
+    const nonRata = Object.entries(nilai).filter(([k]) => k !== 'Rata-Rata');
+    if(!nonRata.length){
+      Toast.show('Isi minimal 1 nilai sebelum menyimpan.','warning');
+      return;
+    }
+
     // Update state lokal terlebih dahulu
     if(!s[`semester${sem}`]) s[`semester${sem}`]={};
     Object.assign(s[`semester${sem}`],nilai);
@@ -1496,7 +1502,7 @@ const InputNilai = {
 
     // Kirim ke GAS jika dikonfigurasi
     if(!CFG.gasUrl){
-      Toast.show('Data diperbarui di sesi ini (GAS belum dikonfigurasi).','warning');
+      Toast.show('Data diperbarui di sesi ini saja (GAS belum dikonfigurasi).','warning');
       return;
     }
 
@@ -1508,24 +1514,22 @@ const InputNilai = {
     statusEl.style.color='var(--info)';
 
     try {
-      // PENTING: kirim NIS (bukan _rowIndex) agar GAS bisa cari baris di Sheets
-      await GAS.post('updateNilai', {
-        nis      : s.nis,       // ← kunci utama pencarian di GAS
+      // ✅ FIX: Gunakan GAS.send (GET + payload) bukan POST
+      const result = await GAS.send('updateNilai', {
+        nis      : s.nis,
         semester : sem,
         nilai    : nilai
       });
 
-      statusEl.textContent='✓ Tersimpan ke Google Sheets!';
+      statusEl.textContent='✓ ' + (result.message || 'Tersimpan ke Google Sheets!');
       statusEl.style.color='var(--success)';
-      Toast.show(`Nilai Sem-${sem} ${s.nama} tersimpan ke Sheets!`, 'success');
-
-      // Reset status setelah 4 detik
-      setTimeout(()=>{ statusEl.textContent=''; }, 4000);
+      Toast.show(`✓ Nilai Sem-${sem} ${s.nama} tersimpan ke Sheets!`, 'success');
+      setTimeout(()=>{ statusEl.textContent=''; }, 5000);
 
     } catch(e) {
       statusEl.textContent='✗ Gagal: ' + e.message;
       statusEl.style.color='var(--danger)';
-      Toast.show('Gagal kirim ke GAS: '+e.message, 'error');
+      Toast.show('✗ Gagal kirim ke GAS: '+e.message, 'error');
     } finally {
       btn.disabled=false;
       btn.innerHTML='<span class="material-icons-round">save</span>Simpan ke Spreadsheet';
@@ -1606,18 +1610,18 @@ const Settings = {
     if(!CFG.gasUrl){ Toast.show('URL GAS belum diisi.','warning'); return; }
     const el=$('gasTestResult');
     el.style.display='flex'; el.className='gas-status gas-warn';
-    el.innerHTML='<span class="material-icons-round">sync</span>Menguji...';
+    el.innerHTML='<span class="material-icons-round">sync</span>Menguji koneksi...';
     try{
       const json=await GAS.get({ action: 'ping' });
       if(json.status==='ok'){
         el.className='gas-status gas-ok';
         el.innerHTML='<span class="material-icons-round">check_circle</span>Terhubung: '+json.message;
-        Toast.show('GAS terhubung dengan baik!','success');
-      } else throw new Error(JSON.stringify(json));
+        Toast.show('✓ GAS terhubung: '+json.message,'success');
+      } else throw new Error(json.message||JSON.stringify(json));
     } catch(e){
       el.className='gas-status gas-err';
       el.innerHTML='<span class="material-icons-round">error</span>Gagal: '+e.message;
-      Toast.show('Gagal terhubung ke GAS.','error');
+      Toast.show('✗ Gagal terhubung ke GAS: '+e.message,'error');
     }
   },
   persist() {
