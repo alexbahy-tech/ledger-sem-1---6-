@@ -43,18 +43,39 @@ input,select,textarea{font-family:inherit}ul{list-style:none}fieldset{border:non
 /* ── LOADER ── */
 .app-loader{position:fixed;inset:0;background:var(--surface);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .4s ease,visibility .4s ease}
 .app-loader.fade-out{opacity:0;visibility:hidden;pointer-events:none}
-.loader-inner{display:flex;flex-direction:column;align-items:center;gap:16px;max-width:400px;text-align:center;padding:0 24px}
+.loader-inner{display:flex;flex-direction:column;align-items:center;gap:16px;max-width:440px;text-align:center;padding:0 24px}
 .loader-logo{width:76px;height:76px;background:linear-gradient(135deg,var(--primary),#7C3AED);border-radius:22px;display:flex;align-items:center;justify-content:center;animation:pulseLogo 2s ease-in-out infinite;box-shadow:0 0 40px rgba(37,99,235,.3)}
 .loader-logo .material-icons-round{color:#fff;font-size:38px}
 .loader-ring{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
 .loader-text{color:var(--text-secondary);font-size:.9rem;font-weight:600}
 .loader-sub{color:var(--text-muted);font-size:.78rem}
+.loader-progress{width:100%;max-width:280px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.loader-progress-bar{height:100%;background:linear-gradient(90deg,var(--primary),#7C3AED);border-radius:2px;transition:width .4s ease;width:0%}
 .error-box{background:var(--danger-bg);color:var(--danger);border:1px solid #FECACA;border-radius:var(--radius);padding:18px 22px;font-size:.82rem;text-align:left;width:100%;line-height:1.8}
 .error-box strong{font-size:.92rem;display:block;margin-bottom:10px}
 .error-box ol{margin-left:18px}
 .error-box code{display:block;background:rgba(0,0,0,.07);padding:8px 12px;border-radius:6px;font-family:var(--mono);font-size:.73rem;word-break:break-all;margin-top:10px}
 @keyframes pulseLogo{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── DATA SOURCE BADGE ── */
+.source-badge{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.03em}
+.source-live{background:#ECFDF5;color:#059669;border:1px solid #A7F3D0}
+.source-cache{background:#FFFBEB;color:#D97706;border:1px solid #FDE68A}
+.source-local{background:#F0F9FF;color:#0284C7;border:1px solid #BAE6FD}
+.source-gas{background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE}
+.source-badge .material-icons-round{font-size:13px}
+
+/* ── SYNC STATUS BAR ── */
+.sync-bar{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-bottom:1px solid var(--border);padding:8px 24px;font-size:.78rem;color:var(--text-muted);flex-wrap:wrap;gap:8px}
+.sync-bar-left{display:flex;align-items:center;gap:12px}
+.sync-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sync-dot.ok{background:var(--success);box-shadow:0 0 6px rgba(5,150,105,.4)}
+.sync-dot.warn{background:var(--warning);box-shadow:0 0 6px rgba(217,119,6,.4)}
+.sync-dot.err{background:var(--danger);box-shadow:0 0 6px rgba(220,38,38,.35)}
+.sync-dot.pulse{animation:syncPulse 1.5s ease-in-out infinite}
+@keyframes syncPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.last-sync{font-weight:600;color:var(--text-secondary)}
 
 /* ── TOAST ── */
 .toast-container{position:fixed;bottom:24px;right:24px;z-index:10000;display:flex;flex-direction:column;gap:10px;pointer-events:none}
@@ -113,9 +134,9 @@ input,select,textarea{font-family:inherit}ul{list-style:none}fieldset{border:non
 .view{display:none;padding:28px 28px 40px;animation:fadeSlideIn .2s ease}
 .view.active{display:block}
 @keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.view-header{margin-bottom:28px}
-.view-header h1{font-size:1.5rem;font-weight:800;color:var(--text-primary);letter-spacing:-.03em;line-height:1.2}
-.view-header p{margin-top:5px;color:var(--text-muted);font-size:.875rem}
+.view-header{margin-bottom:28px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.view-header-left h1{font-size:1.5rem;font-weight:800;color:var(--text-primary);letter-spacing:-.03em;line-height:1.2}
+.view-header-left p{margin-top:5px;color:var(--text-muted);font-size:.875rem}
 
 /* ── BUTTONS ── */
 .btn-primary{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:var(--primary);color:#fff;border-radius:var(--radius-sm);font-size:.875rem;font-weight:700;transition:var(--transition-fast);white-space:nowrap}
@@ -313,6 +334,11 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 .gas-status .material-icons-round{font-size:14px}
 .gas-ok{color:var(--success)}.gas-err{color:var(--danger)}.gas-warn{color:var(--warning)}
 
+/* ── READ-ONLY notice di Data Siswa ── */
+.readonly-notice{background:linear-gradient(135deg,#F0F9FF,#EFF6FF);border:1px solid #BAE6FD;border-radius:var(--radius);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;font-size:.82rem;color:var(--info);font-weight:500}
+.readonly-notice .material-icons-round{font-size:22px;flex-shrink:0;color:var(--primary)}
+.readonly-notice strong{color:var(--text-primary)}
+
 /* ── MISC ── */
 .text-muted{color:var(--text-muted)}.text-sm{font-size:.82rem}.font-mono{font-family:var(--mono)}
 
@@ -328,6 +354,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
   .search-global{display:none}
   .form-row{grid-template-columns:1fr}
   .stat-grid{grid-template-columns:1fr 1fr}
+  .sync-bar{padding:6px 16px}
 }
 @media(max-width:560px){
   .stat-grid{grid-template-columns:1fr}
@@ -347,6 +374,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
     <div class="loader-ring"></div>
     <p class="loader-text" id="loaderText">Memuat data dari Google Sheets...</p>
     <p class="loader-sub" id="loaderSub">Menghubungkan ke spreadsheet</p>
+    <div class="loader-progress"><div class="loader-progress-bar" id="loaderProgressBar"></div></div>
   </div>
 </div>
 
@@ -403,20 +431,34 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
           <span class="material-icons-round">search</span>
           <input type="text" id="globalSearch" placeholder="Cari nama siswa, NIS, kelas..." autocomplete="off">
         </div>
-        <button class="btn-primary" onclick="App.openModal('add')">
-          <span class="material-icons-round">person_add</span><span>Tambah Siswa</span>
-        </button>
         <button class="btn-icon" onclick="App.exportCSV()" title="Export CSV">
           <span class="material-icons-round">download</span>
         </button>
       </div>
     </header>
 
+    <!-- SYNC STATUS BAR — menampilkan sumber data & waktu sinkronisasi -->
+    <div class="sync-bar" id="syncBar" style="display:none">
+      <div class="sync-bar-left">
+        <span class="sync-dot ok" id="syncDot"></span>
+        <span id="syncSourceBadge"></span>
+        <span class="last-sync" id="lastSyncText"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span id="syncRowCount" style="font-size:.78rem;font-weight:700;color:var(--text-secondary)"></span>
+        <button class="btn-outline" style="padding:4px 10px;font-size:.75rem" onclick="App.forceRefresh()">
+          <span class="material-icons-round" style="font-size:14px">refresh</span>Refresh
+        </button>
+      </div>
+    </div>
+
     <div class="views-container">
 
       <!-- VIEW: DASHBOARD -->
       <section id="view-dashboard" class="view active">
-        <div class="view-header"><h1>Dashboard Akademik</h1><p>Ringkasan data ledger nilai siswa kelas XII</p></div>
+        <div class="view-header">
+          <div class="view-header-left"><h1>Dashboard Akademik</h1><p>Ringkasan data ledger nilai siswa kelas XII</p></div>
+        </div>
         <div class="stat-grid">
           <div class="stat-card stat-blue"><div class="stat-icon"><span class="material-icons-round">people</span></div><div class="stat-body"><span class="stat-value" id="statTotalSiswa">—</span><span class="stat-label">Total Siswa</span></div></div>
           <div class="stat-card stat-green"><div class="stat-icon"><span class="material-icons-round">work</span></div><div class="stat-body"><span class="stat-value" id="statTotalProdi">—</span><span class="stat-label">Program Keahlian</span></div></div>
@@ -431,7 +473,30 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 
       <!-- VIEW: DATA SISWA -->
       <section id="view-data-siswa" class="view">
-        <div class="view-header"><h1>Data Siswa</h1><p>Data langsung dari Google Sheets — edit data pakai tombol aksi</p></div>
+        <div class="view-header">
+          <div class="view-header-left"><h1>Data Siswa</h1><p>Data langsung dari Google Sheets (read-only)</p></div>
+        </div>
+
+        <!-- ✅ PENJELASAN read-only agar tidak membingungkan user -->
+        <div class="readonly-notice">
+          <span class="material-icons-round">cloud_sync</span>
+          <div>
+            <strong>Data bersumber dari Google Sheets.</strong>
+            Semua pengguna di perangkat apapun melihat data yang sama secara real-time.
+            Edit data siswa langsung di spreadsheet sumber, lalu klik <strong>Refresh</strong> untuk memperbarui tampilan.
+          </div>
+        </div>
+
+        <!-- ⚠️ BANNER 403 — tampil jika spreadsheet belum publik -->
+        <div id="sharingWarningBanner" class="info-notice warning-notice" style="display:none;margin-bottom:14px">
+          <span class="material-icons-round">warning</span>
+          <div>
+            <strong>Spreadsheet belum diset publik (HTTP 403).</strong>
+            Data identitas berhasil dimuat via GAS, tetapi <strong>nilai semester tidak tersedia</strong> karena GAS <code>getSiswa</code> hanya mengembalikan identitas siswa.
+            <br>Untuk menampilkan nilai lengkap: buka <a href="#" onclick="App.switchView('pengaturan');return false">Pengaturan</a> dan ikuti panduan <em>Share Spreadsheet</em>.
+          </div>
+        </div>
+
         <div class="table-toolbar">
           <div class="toolbar-left">
             <div class="search-box"><span class="material-icons-round">search</span><input type="text" id="tableSearch" placeholder="Cari nama, NIS, NISN..." oninput="Table.onSearch(this.value)"></div>
@@ -474,7 +539,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 
       <!-- VIEW: NILAI SEMESTER -->
       <section id="view-nilai-semester" class="view">
-        <div class="view-header"><h1>Nilai Semester</h1><p>Tampilkan nilai per kelas per semester</p></div>
+        <div class="view-header"><div class="view-header-left"><h1>Nilai Semester</h1><p>Tampilkan nilai per kelas per semester</p></div></div>
         <div class="card nilai-controls">
           <div class="nilai-controls-inner">
             <div class="form-group inline"><label>Kelas</label><select class="select-filter" id="nilaiFilterKelas" onchange="Nilai.onFilterChange()"><option value="">Pilih Kelas...</option></select></div>
@@ -482,7 +547,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
               <option value="1">Semester 1</option><option value="2">Semester 2</option><option value="3">Semester 3</option>
               <option value="4">Semester 4</option><option value="5">Semester 5</option><option value="6">Semester 6</option>
             </select></div>
-            <button class="btn-outline" onclick="Nilai.exportExcel()"><span class="material-icons-round">table_view</span>Export CSV</button>
+            <button class="btn-outline" onclick="Nilai.exportCSV()"><span class="material-icons-round">table_view</span>Export CSV</button>
           </div>
         </div>
         <div class="card"><div class="table-wrapper" id="nilaiTableWrapper"><p class="table-empty"><span class="material-icons-round">info</span><p>Pilih kelas untuk menampilkan nilai.</p></p></div></div>
@@ -490,7 +555,7 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 
       <!-- VIEW: INPUT NILAI (GAS) -->
       <section id="view-input-nilai" class="view">
-        <div class="view-header"><h1>Input Nilai via Google Apps Script</h1><p>Input nilai langsung tersimpan permanen ke Google Sheets</p></div>
+        <div class="view-header"><div class="view-header-left"><h1>Input Nilai via Google Apps Script</h1><p>Nilai tersimpan permanen langsung ke Google Sheets</p></div></div>
 
         <div id="gasNotConfigured" class="info-notice warning-notice" style="margin-bottom:20px">
           <span class="material-icons-round">warning</span>
@@ -542,31 +607,41 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
 
       <!-- VIEW: REKAP PRODI -->
       <section id="view-rekap-prodi" class="view">
-        <div class="view-header"><h1>Rekap per Program Keahlian</h1><p>Ringkasan jumlah siswa dan distribusi kelas per program keahlian</p></div>
+        <div class="view-header"><div class="view-header-left"><h1>Rekap per Program Keahlian</h1><p>Ringkasan jumlah siswa dan distribusi kelas</p></div></div>
         <div id="rekapProdiContent" class="rekap-grid"></div>
       </section>
 
       <!-- VIEW: PENGATURAN -->
       <section id="view-pengaturan" class="view">
-        <div class="view-header"><h1>Pengaturan</h1><p>Konfigurasi koneksi ke Google Sheets dan Google Apps Script</p></div>
+        <div class="view-header"><div class="view-header-left"><h1>Pengaturan</h1><p>Konfigurasi koneksi ke Google Sheets dan Google Apps Script</p></div></div>
 
         <div class="card" style="padding:24px;margin-bottom:20px">
           <h3 style="font-size:.95rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px">
-            <span class="material-icons-round" style="color:var(--primary)">table_chart</span>Google Sheets (CSV — Read Only)
+            <span class="material-icons-round" style="color:var(--primary)">table_chart</span>Google Sheets (CSV — Sumber Data Bersama)
           </h3>
-          <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:16px">Digunakan untuk menampilkan data. Spreadsheet harus diset "Anyone with link → Viewer".</p>
+          <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:16px">
+            Data diambil langsung dari Google Sheets setiap halaman dibuka. Semua pengguna di perangkat manapun akan mendapatkan data yang sama.
+            Spreadsheet harus diset <strong>"Anyone with link → Viewer"</strong>.
+          </p>
+
+          <!-- ✅ INDIKATOR CACHE AKTIF -->
+          <div class="info-notice" style="margin-bottom:16px">
+            <span class="material-icons-round">info</span>
+            <span>
+              Data di-<em>cache</em> di browser selama <strong id="cacheTtlDisplay">10 menit</strong> untuk mempercepat loading.
+              Gunakan tombol <strong>Force Refresh</strong> untuk mengambil data terbaru sebelum cache habis.
+            </span>
+          </div>
+
           <div style="display:flex;flex-direction:column;gap:12px">
+            <div id="activeSheetInfo" style="display:none;font-size:.75rem;font-weight:700;color:var(--success);background:var(--success-bg);padding:8px 12px;border-radius:var(--radius-sm);border:1px solid #A7F3D0"></div>
+            <div class="form-group"><label>Spreadsheet ID</label><input type="text" id="cfgSheetId" placeholder="1IwPOMqIPk3wtx4WA5pxhTxqUjBJvsOPouq2OpJYRITY" value=""></div>
+            <div class="form-group"><label>Sheet GID (Tab)</label><input type="text" id="cfgSheetGid" placeholder="0 (tab pertama) atau lihat di URL ?gid=..." value=""></div>
+            <div class="form-group"><label>Baris Data Mulai (biasanya 3)</label><input type="number" id="cfgDataStart" placeholder="3" value="" min="1"></div>
             <div class="form-group">
-              <label>Spreadsheet ID</label>
-              <input type="text" id="cfgSheetId" placeholder="ID dari URL spreadsheet" value="">
-            </div>
-            <div class="form-group">
-              <label>Sheet GID (Tab)</label>
-              <input type="text" id="cfgSheetGid" placeholder="GID dari URL (angka)" value="">
-            </div>
-            <div class="form-group">
-              <label>Baris Data Mulai (biasanya 3)</label>
-              <input type="number" id="cfgDataStart" placeholder="3" value="" min="1">
+              <label>Cache Duration (menit)</label>
+              <input type="number" id="cfgCacheTtl" placeholder="10" value="" min="1" max="60">
+              <span style="font-size:.72rem;color:var(--text-muted);margin-top:2px">Data di-cache agar loading cepat. Set ke 1 untuk hampir real-time.</span>
             </div>
             <button class="btn-primary" style="align-self:flex-start" onclick="Settings.saveSheetConfig()">
               <span class="material-icons-round">save</span>Simpan & Reload Data
@@ -580,131 +655,53 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
           </h3>
           <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:16px">Digunakan untuk menyimpan nilai ke spreadsheet. Deploy <code>Code.gs</code> sebagai Web App terlebih dahulu.</p>
           <div style="display:flex;flex-direction:column;gap:12px">
-            <div class="form-group">
-              <label>URL Web App</label>
-              <input type="url" id="cfgGasUrl" placeholder="https://script.google.com/macros/s/AKfycbwHZ5w0CMK-a2HZ5nng_jNcPSesBQ5xVeJjEMuKzLSQgJzj5PoMx3OQuoCVbiE47hXQ/exec" value="">
-            </div>
+            <div class="form-group"><label>URL Web App</label><input type="url" id="cfgGasUrl" placeholder="https://script.google.com/macros/s/AKfycbwR7EG0KJjya_WxS-wT3kHWvZlhjyAAx7fPdipBHaUlG7I_75MU4h13XRI7h73JFP4/exec " value=""></div>
             <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-              <button class="btn-primary" style="align-self:flex-start" onclick="Settings.saveGasConfig()">
-                <span class="material-icons-round">save</span>Simpan URL
-              </button>
-              <button class="btn-outline" onclick="Settings.testGas()">
-                <span class="material-icons-round">wifi_tethering</span>Tes Koneksi
-              </button>
+              <button class="btn-primary" style="align-self:flex-start" onclick="Settings.saveGasConfig()"><span class="material-icons-round">save</span>Simpan URL</button>
+              <button class="btn-outline" onclick="Settings.testGas()"><span class="material-icons-round">wifi_tethering</span>Tes Koneksi</button>
               <span id="gasTestResult" class="gas-status" style="display:none"></span>
             </div>
           </div>
         </div>
 
+        <!-- ✅ PANDUAN SHARING SPREADSHEET -->
         <div class="card" style="padding:24px;margin-bottom:20px">
           <h3 style="font-size:.95rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px">
-            <span class="material-icons-round" style="color:var(--primary)">integration_instructions</span>Panduan Deploy Google Apps Script
+            <span class="material-icons-round" style="color:var(--success)">share</span>Cara Share Spreadsheet (Wajib)
           </h3>
           <div style="font-size:.85rem;color:var(--text-secondary);line-height:2">
+            <p style="margin-bottom:10px">Agar semua user dari perangkat manapun bisa melihat data, spreadsheet <strong>wajib</strong> dibagikan secara publik:</p>
             <ol style="margin-left:20px">
-              <li>Buka spreadsheet → klik menu <strong>Extensions → Apps Script</strong></li>
-              <li>Hapus semua kode yang ada, paste seluruh isi file <code style="font-family:var(--mono);background:var(--bg);padding:1px 6px;border-radius:4px">Code.gs</code></li>
-              <li>Klik <strong>Save</strong> (ikon disket), beri nama project</li>
-              <li>Klik <strong>Deploy → New Deployment</strong></li>
-              <li>Pilih type: <strong>Web App</strong>, set:
-                <ul style="margin-left:16px;list-style:disc">
-                  <li><strong>Execute as: Me</strong> (akun Google Anda)</li>
-                  <li><strong>Who has access: Anyone</strong></li>
-                </ul>
-              </li>
-              <li>Klik <strong>Deploy</strong> → izinkan akses → copy URL yang muncul</li>
-              <li>Paste URL di field "URL Web App" di atas, klik Simpan, lalu Tes Koneksi</li>
+              <li>Buka Google Sheets spreadsheet sumber</li>
+              <li>Klik tombol <strong>Share</strong> (pojok kanan atas)</li>
+              <li>Klik <strong>"Change to anyone with the link"</strong></li>
+              <li>Pastikan permission diset ke <strong>Viewer</strong></li>
+              <li>Klik <strong>Done</strong></li>
             </ol>
-            <div class="info-notice" style="margin-top:16px;margin-bottom:0;border-color:#BAE6FD">
-              <span class="material-icons-round">info</span>
-              <span>⚠️ <strong>PENTING:</strong> Setiap ada perubahan kode <code>Code.gs</code>, buat deployment baru (<strong>Deploy → New Deployment</strong>) dan update URL-nya di sini. "Redeploy" tidak cukup.</span>
+            <div class="info-notice" style="margin-top:12px;margin-bottom:0">
+              <span class="material-icons-round">lock_open</span>
+              <span>Tanpa setting ini, hanya pemilik akun Google yang bisa melihat data. User lain akan mendapat error "Forbidden".</span>
             </div>
           </div>
         </div>
 
         <div class="card" style="padding:24px">
           <h3 style="font-size:.95rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px">
-            <span class="material-icons-round" style="color:var(--warning)">info</span>Panduan Deploy ke GitHub Pages
+            <span class="material-icons-round" style="color:var(--primary)">integration_instructions</span>Panduan Deploy Google Apps Script
           </h3>
           <div style="font-size:.85rem;color:var(--text-secondary);line-height:2">
             <ol style="margin-left:20px">
-              <li>Upload file <code style="font-family:var(--mono);background:var(--bg);padding:1px 6px;border-radius:4px">index.html</code> ke repositori GitHub</li>
-              <li>Buka <strong>Settings → Pages → Source: Deploy from branch → main → / (root)</strong></li>
-              <li>Tunggu beberapa menit, site akan live di <code style="font-family:var(--mono);background:var(--bg);padding:1px 6px;border-radius:4px">https://[username].github.io/[repo]</code></li>
-              <li>Isi <strong>Spreadsheet ID</strong> dan <strong>GID</strong> dari URL spreadsheet Google Sheets Anda</li>
-              <li>Pastikan spreadsheet diset <strong>"Anyone with the link → Viewer"</strong></li>
+              <li>Buka spreadsheet → klik <strong>Extensions → Apps Script</strong></li>
+              <li>Hapus semua kode, paste seluruh isi <code style="background:var(--bg);padding:1px 6px;border-radius:4px;font-family:var(--mono)">Code.gs</code></li>
+              <li>Klik <strong>Save</strong>, beri nama project</li>
+              <li>Klik <strong>Deploy → New Deployment → Web App</strong></li>
+              <li>Set: <strong>Execute as: Me</strong> &nbsp;|&nbsp; <strong>Who has access: Anyone</strong></li>
+              <li>Klik Deploy → izinkan akses → copy URL → paste di field atas</li>
             </ol>
           </div>
         </div>
       </section>
 
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: TAMBAH/EDIT SISWA -->
-<div id="modalOverlay" class="modal-overlay hidden" onclick="App.closeModalOutside(event)">
-  <div class="modal" role="dialog" aria-modal="true">
-    <div class="modal-header">
-      <h2 id="modalTitle">Tambah Siswa Baru</h2>
-      <button class="modal-close" onclick="App.closeModal()"><span class="material-icons-round">close</span></button>
-    </div>
-    <div class="modal-body">
-      <form id="siswaForm" onsubmit="return false;" novalidate>
-        <input type="hidden" id="formRowIndex"><input type="hidden" id="formNo">
-        <fieldset class="form-section"><legend>Identitas Siswa</legend>
-          <div class="form-row">
-            <div class="form-group"><label for="formNIS">NIS <span class="required">*</span></label><input type="text" id="formNIS" placeholder="Nomor Induk Siswa" maxlength="10" required><span class="field-error" id="errNIS"></span></div>
-            <div class="form-group"><label for="formNISN">NISN</label><input type="text" id="formNISN" placeholder="Nomor Induk Siswa Nasional" maxlength="15"></div>
-          </div>
-          <div class="form-group full-width"><label for="formNama">Nama Siswa <span class="required">*</span></label><input type="text" id="formNama" placeholder="Nama lengkap siswa" required><span class="field-error" id="errNama"></span></div>
-          <div class="form-row">
-            <div class="form-group"><label for="formProdi">Program Keahlian</label>
-              <select id="formProdi" onchange="Modal.onProdiChange(this.value)">
-                <option value="">— Pilih —</option>
-                <option>Akuntansi dan Keuangan Lembaga</option>
-                <option>Pemasaran</option>
-                <option>Manajemen Perkantoran dan Layanan Bisnis</option>
-                <option>Teknik Jaringan Komputer dan Telekomunikasi</option>
-                <option>Teknik Ketenagalistrikan</option>
-                <option>Usaha Layanan Pariwisata</option>
-              </select></div>
-            <div class="form-group"><label for="formKelas">Kelas <span class="required">*</span></label>
-              <select id="formKelas" required><option value="">— Pilih Kelas —</option></select>
-              <span class="field-error" id="errKelas"></span></div>
-          </div>
-        </fieldset>
-        <fieldset class="form-section"><legend>Nilai Semester (opsional)</legend>
-          <div class="semester-tabs">
-            <button type="button" class="sem-tab active" data-sem="1" onclick="Modal.switchSemTab(1)">Sem. 1</button>
-            <button type="button" class="sem-tab" data-sem="2" onclick="Modal.switchSemTab(2)">Sem. 2</button>
-            <button type="button" class="sem-tab" data-sem="3" onclick="Modal.switchSemTab(3)">Sem. 3</button>
-            <button type="button" class="sem-tab" data-sem="4" onclick="Modal.switchSemTab(4)">Sem. 4</button>
-            <button type="button" class="sem-tab" data-sem="5" onclick="Modal.switchSemTab(5)">Sem. 5</button>
-            <button type="button" class="sem-tab" data-sem="6" onclick="Modal.switchSemTab(6)">Sem. 6</button>
-          </div>
-          <div id="semesterFieldsContainer"></div>
-        </fieldset>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-ghost" onclick="App.closeModal()">Batal</button>
-      <button class="btn-primary" id="submitFormBtn" onclick="App.submitForm()">
-        <span class="material-icons-round">save</span><span id="submitBtnText">Simpan Data</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: KONFIRMASI HAPUS -->
-<div id="confirmOverlay" class="modal-overlay hidden">
-  <div class="modal modal-confirm" role="dialog" aria-modal="true">
-    <div class="confirm-icon"><span class="material-icons-round">warning_amber</span></div>
-    <h3 id="confirmTitle">Hapus Data Siswa?</h3>
-    <p id="confirmMessage">Data ini akan dihapus dari tampilan sesi ini.</p>
-    <div class="confirm-actions">
-      <button class="btn-ghost" onclick="App.closeConfirm()">Batal</button>
-      <button class="btn-danger" id="confirmOkBtn"><span class="material-icons-round">delete_forever</span>Ya, Hapus</button>
     </div>
   </div>
 </div>
@@ -721,105 +718,169 @@ th.sort-asc .sort-icon,th.sort-desc .sort-icon{opacity:1;color:var(--primary)}
   </div>
 </div>
 
-<!-- ═══════════════════════════════ SCRIPT ═══════════════════════════════ -->
+<!-- MODAL: KONFIRMASI -->
+<div id="confirmOverlay" class="modal-overlay hidden">
+  <div class="modal modal-confirm" role="dialog" aria-modal="true">
+    <div class="confirm-icon"><span class="material-icons-round">warning_amber</span></div>
+    <h3 id="confirmTitle">Konfirmasi</h3>
+    <p id="confirmMessage">Yakin melanjutkan aksi ini?</p>
+    <div class="confirm-actions">
+      <button class="btn-ghost" onclick="App.closeConfirm()">Batal</button>
+      <button class="btn-danger" id="confirmOkBtn"><span class="material-icons-round">check</span>Ya, Lanjutkan</button>
+    </div>
+  </div>
+</div>
+
 <script>
 'use strict';
 
-/* ─── CONFIG ─── */
+/* ══════════════════════════════════════════════════════════════
+   KONFIGURASI DEFAULT
+   Semua nilai ini bisa diubah via halaman Pengaturan.
+   Konfigurasi disimpan di localStorage BROWSER MASING-MASING USER.
+   Data Sheets diambil langsung dari URL publik Google → sama untuk semua.
+══════════════════════════════════════════════════════════════ */
 let CFG = {
-  sheetId:   '1y6mLBymxnmzP9khH1ZLU5V3eOWmXc-X8lp9cBNf0Raw',
-  sheetGid:  '1121452969',
-  dataStart: 3,
-  gasUrl:    ''
+  // ✅ Spreadsheet: ledger_nilai_XII Terbaru
+  // URL: https://docs.google.com/spreadsheets/d/1IwPOMqIPk3wtx4WA5pxhTxqUjBJvsOPouq2OpJYRITY
+  sheetId  : '1IwPOMqIPk3wtx4WA5pxhTxqUjBJvsOPouq2OpJYRITY',
+  sheetGid : '0',        // Tab pertama "LEDGER" — GID default = 0
+  dataStart: 3,          // Baris data mulai dari baris ke-3 (row 1=header, row 2=subheader mapel)
+  gasUrl   : '',
+  cacheTtl : 10
 };
 
-/* ─── SEMESTER STRUCTURE ─── */
+/* ══════════════════════════════════════════════════════════════
+   SEMESTER STRUCTURE
+   ─────────────────────────────────────────────────────────────
+   Disesuaikan dengan struktur spreadsheet aktual:
+   Col A–F  : No, NIS, NISN, Nama, Prodi, Kelas  (index 0–5)
+   Col G    : KOSONG / spacer                     (index 6)
+   Col H–T  : Semester 1 (13 kolom)               (index 7–19)
+   Col U–AG : Semester 2 (13 kolom)               (index 20–32)
+   Col AH–AS: Semester 3 (12 kolom)               (index 33–44)
+   Col AT–BE: Semester 4 (12 kolom)               (index 45–56)
+   Col BF–BO: Semester 5 (10 kolom)               (index 57–66)
+   Col BP–BY: Semester 6 (10 kolom)               (index 67–76)
+
+   Urutan mapel Sem 1 & 2: Seni Budaya sebelum Mulok
+   (berbeda dari versi lama yang Mulok sebelum Seni Budaya)
+══════════════════════════════════════════════════════════════ */
 const SEM = {
-  1:{s:6, mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','PJOK','Sejarah','Mulok','Seni Budaya','Matematika','Bhs. Inggris','Informatika','Projek IPAS','DPK','Rata-Rata']},
-  2:{s:19,mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','PJOK','Sejarah','Mulok','Seni Budaya','Matematika','Bhs. Inggris','Informatika','Projek IPAS','DPK','Rata-Rata']},
-  3:{s:32,mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','PJOK','Sejarah','Mulok','Matematika','Bhs. Inggris','KK','PKK','Mapel Pilihan','Rata-Rata']},
-  4:{s:44,mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','PJOK','Sejarah','Mulok','Matematika','Bhs. Inggris','KK','PKK','Mapel Pilihan','Rata-Rata']},
-  5:{s:56,mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','Mulok','Matematika','Bhs. Inggris','KK','PKK','Mapel Pilihan','Rata-Rata']},
-  6:{s:66,mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','Mulok','Matematika','Bhs. Inggris','KK','PKK','Mapel Pilihan','Rata-Rata']},
+  1:{s:7,  mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','PJOK','Sejarah','Seni Budaya','Mulok','Matematika','Bhs. Inggris','Informatika','Projek IPAS','DPK','Rata-Rata']},
+  2:{s:20, mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','PJOK','Sejarah','Seni Budaya','Mulok','Matematika','Bhs. Inggris','Informatika','Projek IPAS','DPK','Rata-Rata']},
+  3:{s:33, mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','PJOK','Sejarah','Mulok','Matematika','Bhs. Inggris','KK','PKK','Mapel Pilihan','Rata-Rata']},
+  4:{s:45, mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','PJOK','Sejarah','Mulok','Matematika','Bhs. Inggris','KK','PKK','Mapel Pilihan','Rata-Rata']},
+  5:{s:57, mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','Mulok','Matematika','Bhs. Inggris','KK','PKK','Mapel Pilihan','Rata-Rata']},
+  6:{s:67, mapel:['Pend. Agama','Pend. Pancasila','Bhs. Indonesia','Mulok','Matematika','Bhs. Inggris','KK','PKK','Mapel Pilihan','Rata-Rata']},
 };
 const MAPEL = k => SEM[k].mapel;
 
 const KELAS_LIST = ['XIIAKL','XIIPMS','XIIMPLB','XIITJKT','XIITK','XIIULP'];
 const PRODI_KELAS = {
-  'Akuntansi dan Keuangan Lembaga':['XIIAKL'],
-  'Pemasaran':['XIIPMS'],
-  'Manajemen Perkantoran dan Layanan Bisnis':['XIIMPLB'],
-  'Teknik Jaringan Komputer dan Telekomunikasi':['XIITJKT'],
-  'Teknik Ketenagalistrikan':['XIITK'],
-  'Usaha Layanan Pariwisata':['XIIULP'],
+  'Akuntansi dan Keuangan Lembaga'              : ['XIIAKL'],
+  'Pemasaran'                                   : ['XIIPMS'],
+  'Manajemen Perkantoran dan Layanan Bisnis'    : ['XIIMPLB'],
+  'Teknik Jaringan Komputer dan Telekomunikasi' : ['XIITJKT'],
+  'Teknik Ketenagalistrikan'                    : ['XIITK'],
+  'Usaha Layanan Pariwisata'                    : ['XIIULP'],
 };
 
-/* ─── STATE ─── */
+/* ── STATE ── */
 const State = {
   allData:[], filteredData:[], sortCol:'no', sortDir:'asc',
   currentPage:1, perPage:25, filterKelas:'', filterProdi:'', searchQuery:'',
-  isDark:false, currentSemTab:1
+  isDark:false, dataSource:'', lastSyncTime:null
 };
 
 const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
 
-/* ════════════════════════════════════════════
-   ✅ FIX UTAMA: GAS HTTP HELPER
+/* ══════════════════════════════════════════════════════════════
+   CACHE MANAGER
+   ─────────────────────────────────────────────────────────────
+   ✅ SOLUSI UTAMA MULTI-USER / MULTI-PERANGKAT:
    
-   MASALAH LAMA:
-   - fetch POST dengan mode:'no-cors' → data terkirim tapi GAS tidak
-     bisa membaca body karena content-type tidak diteruskan dengan benar.
-   - Browser otomatis block CORS preflight untuk POST ke GAS karena
-     GAS tidak mengembalikan header Access-Control-Allow-Origin.
+   Masalah lama: data disimpan di localStorage → tiap user/device
+   memiliki data sendiri yang bisa beda dengan spreadsheet asli.
    
-   SOLUSI:
-   - Semua request ke GAS menggunakan GET dengan ?action=xxx&payload=<JSON>
-   - GAS doGet sudah support CORS secara native untuk GET request
-   - Payload diencode sebagai encodeURIComponent(JSON.stringify(data))
-   - Response bisa dibaca langsung karena tidak ada CORS block untuk GET
-════════════════════════════════════════════ */
+   Solusi baru:
+   1. SUMBER DATA TUNGGAL = Google Sheets (CSV export publik)
+   2. Tidak ada edit data di UI — hanya baca + filter + input via GAS
+   3. Cache hanya di sessionStorage (tab aktif saja, tidak persisten)
+      dengan TTL singkat (default 10 menit)
+   4. Setiap user yang membuka halaman akan fetch dari Sheets langsung
+   5. Setelah TTL habis, data otomatis di-fetch ulang dari sumber
+══════════════════════════════════════════════════════════════ */
+const Cache = {
+  KEY : 'smk-ledger-csv-cache',
+
+  // Simpan CSV mentah + timestamp ke sessionStorage
+  set(csvText) {
+    try {
+      const entry = { ts: Date.now(), csv: csvText };
+      sessionStorage.setItem(Cache.KEY, JSON.stringify(entry));
+    } catch(e) {
+      // sessionStorage penuh atau tidak tersedia — abaikan
+    }
+  },
+
+  // Ambil cache jika belum kadaluarsa, null jika sudah/tidak ada
+  get() {
+    try {
+      const raw = sessionStorage.getItem(Cache.KEY);
+      if (!raw) return null;
+      const entry = JSON.parse(raw);
+      const ttlMs = (CFG.cacheTtl || 10) * 60 * 1000;
+      if (Date.now() - entry.ts > ttlMs) {
+        sessionStorage.removeItem(Cache.KEY); // buang cache kadaluarsa
+        return null;
+      }
+      return entry;
+    } catch(e) { return null; }
+  },
+
+  // Hapus cache paksa (untuk Force Refresh)
+  clear() {
+    try { sessionStorage.removeItem(Cache.KEY); } catch(e) {}
+  },
+
+  // Format kapan data terakhir di-fetch
+  ageText(ts) {
+    const sec = Math.round((Date.now() - ts) / 1000);
+    if (sec < 60)  return `${sec} detik lalu`;
+    if (sec < 3600) return `${Math.round(sec/60)} menit lalu`;
+    return `${Math.round(sec/3600)} jam lalu`;
+  }
+};
+
+/* ══════════════════════════════════════════════════════════════
+   GAS HTTP HELPER — GET + payload (tidak ada CORS issue)
+══════════════════════════════════════════════════════════════ */
 const GAS = {
-  /**
-   * ✅ Kirim data ke GAS via GET request + query params
-   * Ini solusi resmi yang benar-benar bisa dibaca GAS dari browser.
-   * doGet di Code.gs sudah dikonfigurasi untuk menangani payload param.
-   */
   async send(action, data) {
     if (!CFG.gasUrl) throw new Error('URL GAS belum dikonfigurasi');
-
     const payload = encodeURIComponent(JSON.stringify(data));
-    const url     = `${CFG.gasUrl}?action=${encodeURIComponent(action)}&payload=${payload}`;
-
-    const r = await fetch(url, {
-      method: 'GET',
-      cache:  'no-cache',
-      signal: AbortSignal.timeout(30000) // GAS kadang lambat, beri 30 detik
-    });
-
+    const url = `${CFG.gasUrl}?action=${encodeURIComponent(action)}&payload=${payload}`;
+    const r = await fetch(url, { method:'GET', cache:'no-cache', signal: AbortSignal.timeout(30000) });
     if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
-
     const json = await r.json();
     if (json.status === 'error') throw new Error(json.message || 'GAS error');
     return json;
   },
-
-  /**
-   * GET request untuk ping / ambil data
-   */
-  async get(params = {}) {
+  async get(params={}) {
     if (!CFG.gasUrl) throw new Error('URL GAS belum dikonfigurasi');
-    const qs  = Object.entries(params).map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join('&');
-    const url = CFG.gasUrl + (qs ? '?' + qs : '');
-    const r   = await fetch(url, { method:'GET', cache:'no-cache', signal: AbortSignal.timeout(15000) });
+    const qs = Object.entries(params).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&');
+    const url = CFG.gasUrl + (qs ? '?'+qs : '');
+    const r = await fetch(url, { method:'GET', cache:'no-cache', signal: AbortSignal.timeout(15000) });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return await r.json();
   }
 };
 
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    CSV PARSER (RFC-4180)
-════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════ */
 function parseCSV(text) {
   const rows=[]; let row=[],f='',q=false;
   for(let i=0;i<text.length;i++){
@@ -845,9 +906,9 @@ function rowToSiswa(row, rowIndex) {
     const n=parseFloat(v); return isNaN(n)?null:Math.round(n*100)/100;
   };
   const obj = {
-    _rowIndex:rowIndex,
-    no:gv(0), nis:String(gv(1)||''), nisn:String(gv(2)||''),
-    nama:String(gv(3)||''), prodi:String(gv(4)||''), kelas:String(gv(5)||'')
+    _rowIndex: rowIndex,
+    no: gv(0), nis: String(gv(1)||''), nisn: String(gv(2)||''),
+    nama: String(gv(3)||''), prodi: String(gv(4)||''), kelas: String(gv(5)||'')
   };
   for(let s=1;s<=6;s++){
     const {s:start,mapel}=SEM[s]; const sd={}; let ci=start;
@@ -857,63 +918,247 @@ function rowToSiswa(row, rowIndex) {
   return obj;
 }
 
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    FETCHER
-════════════════════════════════════════════ */
+   ─────────────────────────────────────────────────────────────
+   ✅ Strategi fetch 4 lapis — mengatasi HTTP 403 & CORS:
+
+   LAPIS 1 — Cache sessionStorage   (instan, 0 request)
+   LAPIS 2 — CSV langsung dari Google  (paling cepat jika publik)
+   LAPIS 3 — CSV via 2 proxy CORS publik  (jika 403 karena CORS)
+   LAPIS 4 — GAS getSiswa endpoint   (SELALU berhasil jika GAS
+              sudah di-deploy karena GAS membaca dengan hak
+              akun pemilik, bukan hak pengunjung — bypass 403)
+
+   HTTP 403 = spreadsheet BELUM diset publik.
+   Lapis 4 memastikan data tetap tampil meski 403.
+══════════════════════════════════════════════════════════════ */
 const Fetcher = {
+  csvUrl() {
+    return `https://docs.google.com/spreadsheets/d/${CFG.sheetId}/export?format=csv&gid=${CFG.sheetGid}`;
+  },
+
   proxies: [
     u => u,
     u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
     u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
   ],
-  async load() {
-    $('loaderSub').textContent = 'Mengambil data dari spreadsheet...';
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${CFG.sheetId}/export?format=csv&gid=${CFG.sheetGid}`;
-    let csv = null, lastErr = '';
 
-    for(let i=0;i<Fetcher.proxies.length;i++){
-      const url = Fetcher.proxies[i](csvUrl);
-      $('loaderSub').textContent = i===0 ? 'Menghubungkan langsung...' : `Mencoba proxy ${i}...`;
-      try {
-        const r = await fetch(url, {cache:'no-cache', signal: AbortSignal.timeout(10000)});
-        if(r.ok){ csv = await r.text(); break; }
-        else lastErr = `HTTP ${r.status}`;
-      } catch(e){ lastErr = e.message; }
+  setProgress(pct) {
+    const b = $('loaderProgressBar');
+    if (b) b.style.width = pct + '%';
+  },
+
+  setStatus(text, sub) {
+    const t = $('loaderText'), s = $('loaderSub');
+    if (t && text !== undefined) t.textContent = text;
+    if (s && sub  !== undefined) s.textContent = sub;
+  },
+
+  // ── LAPIS 4: Ambil data via GAS getSiswa
+  // GAS membaca spreadsheet dengan hak pemilik → tidak perlu spreadsheet publik
+  async loadViaGAS() {
+    if (!CFG.gasUrl) throw new Error('URL GAS belum dikonfigurasi');
+    Fetcher.setStatus('Mengambil data via Google Apps Script...', 'Menghubungi GAS endpoint...');
+    Fetcher.setProgress(70);
+
+    const url = `${CFG.gasUrl}?action=getSiswa`;
+    const r = await fetch(url, { method:'GET', cache:'no-store', signal: AbortSignal.timeout(20000) });
+    if (!r.ok) throw new Error(`GAS HTTP ${r.status}`);
+
+    const json = await r.json();
+    if (json.status !== 'ok' || !Array.isArray(json.data)) {
+      throw new Error(json.message || 'GAS tidak mengembalikan data valid');
     }
 
-    if(!csv){ Fetcher.showError(lastErr); return null; }
-    return Fetcher.parse(csv);
+    // Konversi format GAS {no,nis,nisn,nama,prodi,kelas} ke format internal
+    // Catatan: GAS getSiswa hanya mengembalikan identitas, BUKAN nilai semester.
+    // Nilai semester perlu diambil terpisah jika GAS mendukungnya.
+    // Untuk saat ini, identitas dari GAS + nilai kosong (akan ditambah nanti).
+    const data = json.data.map((s, i) => ({
+      _rowIndex : i + CFG.dataStart,
+      no    : s.no   || i + 1,
+      nis   : String(s.nis  || ''),
+      nisn  : String(s.nisn || ''),
+      nama  : String(s.nama || ''),
+      prodi : String(s.prodi|| ''),
+      kelas : String(s.kelas|| ''),
+      // Semester data kosong — GAS getSiswa tidak menyertakan nilai
+      semester1:{}, semester2:{}, semester3:{},
+      semester4:{}, semester5:{}, semester6:{}
+    }));
+
+    return { data, source: 'gas' };
   },
+
+  async load(forceRefresh=false) {
+    // ── LAPIS 1: Cache sessionStorage
+    if (!forceRefresh) {
+      const cached = Cache.get();
+      if (cached) {
+        Fetcher.setStatus('Memuat dari cache...', `Data di-cache ${Cache.ageText(cached.ts)}`);
+        Fetcher.setProgress(80);
+        const data = Fetcher.parse(cached.csv);
+        Fetcher.setProgress(100);
+        State.dataSource  = 'cache';
+        State.lastSyncTime = cached.ts;
+        return data;
+      }
+    }
+
+    // ── LAPIS 2 & 3: CSV via direct + proxy
+    Fetcher.setStatus('Mengambil data dari Google Sheets...', 'Menghubungkan ke spreadsheet');
+    Fetcher.setProgress(10);
+
+    const csvUrl  = Fetcher.csvUrl();
+    let csv       = null;
+    let lastErr   = '';
+    let is403     = false;
+
+    for (let i = 0; i < Fetcher.proxies.length; i++) {
+      const proxyUrl = Fetcher.proxies[i](csvUrl);
+      const labels   = ['Koneksi langsung ke Google...', 'Mencoba proxy 1 (allorigins)...', 'Mencoba proxy 2 (corsproxy)...'];
+      Fetcher.setStatus(undefined, labels[i] || `Mencoba proxy ${i}...`);
+      Fetcher.setProgress(10 + i * 18);
+
+      try {
+        const r = await fetch(proxyUrl, { cache:'no-store', signal: AbortSignal.timeout(12000) });
+
+        if (r.status === 403 || r.status === 401) {
+          is403   = true;
+          lastErr = `HTTP ${r.status} — Spreadsheet belum diset publik (Share → Anyone with link)`;
+          continue; // lanjut ke proxy berikutnya, jika sama saja lompat ke GAS
+        }
+
+        if (!r.ok) { lastErr = `HTTP ${r.status} — ${r.statusText}`; continue; }
+
+        const text = await r.text();
+        // Validasi: pastikan bukan halaman HTML error
+        if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+          is403   = true;
+          lastErr = 'Response adalah HTML (bukan CSV) — kemungkinan 403 via proxy';
+          continue;
+        }
+        csv = text;
+        break;
+
+      } catch(e) {
+        lastErr = e.message;
+      }
+    }
+
+    // ── CSV berhasil
+    if (csv) {
+      Cache.set(csv);
+      Fetcher.setProgress(95);
+      const data = Fetcher.parse(csv);
+      Fetcher.setProgress(100);
+      State.dataSource   = 'live';
+      State.lastSyncTime = Date.now();
+      return data;
+    }
+
+    // ── LAPIS 4: Fallback ke GAS getSiswa (bypass 403)
+    if (CFG.gasUrl) {
+      try {
+        Fetcher.setStatus(
+          is403
+            ? 'Spreadsheet belum publik — mengambil via GAS...'
+            : 'CSV gagal — mencoba via Google Apps Script...',
+          'GAS membaca spreadsheet dengan hak pemilik...'
+        );
+        const { data, source } = await Fetcher.loadViaGAS();
+        Fetcher.setProgress(100);
+        State.dataSource   = source;
+        State.lastSyncTime = Date.now();
+
+        // Tampilkan warning jika 403 agar admin tahu harus fix sharing
+        if (is403) {
+          // Simpan flag agar SyncBar menampilkan warning sharing
+          State.sharingWarning = true;
+        }
+        return data;
+      } catch(gasErr) {
+        // GAS juga gagal — tampilkan error lengkap
+        Fetcher.showError(lastErr, gasErr.message, is403);
+        return null;
+      }
+    }
+
+    // ── Semua gagal, GAS tidak dikonfigurasi
+    Fetcher.showError(lastErr, null, is403);
+    return null;
+  },
+
   parse(csv) {
     const all = parseCSV(csv);
-    return all.slice(CFG.dataStart - 1)
-      .filter(r=>(r[0]||'').trim()!=='' && (r[3]||'').trim()!=='')
-      .map((r,i)=>rowToSiswa(r, CFG.dataStart+i));
+    return all
+      .slice(CFG.dataStart - 1)
+      .filter(r => (r[0]||'').trim()!=='' && (r[3]||'').trim()!=='')
+      .map((r,i) => rowToSiswa(r, CFG.dataStart+i));
   },
-  showError(msg) {
+
+  showError(csvErr, gasErr, is403) {
     const inner = document.querySelector('.loader-inner');
+
+    // Panduan spesifik 403
+    const fix403 = is403 ? `
+      <div style="margin-top:14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:14px;color:#92400E">
+        <strong>⚡ Solusi Cepat (HTTP 403):</strong>
+        <ol style="margin:8px 0 0 18px;line-height:2">
+          <li>Buka spreadsheet di Google Sheets</li>
+          <li>Klik tombol <strong>Share</strong> (pojok kanan atas)</li>
+          <li>Klik <strong>"Change to anyone with the link"</strong></li>
+          <li>Pastikan role = <strong>Viewer</strong>, lalu <strong>Done</strong></li>
+          <li>Kembali ke sini dan klik <strong>Coba Lagi</strong></li>
+        </ol>
+        <p style="margin-top:8px;font-size:.78rem">— ATAU — Isi URL GAS di Pengaturan agar data bisa diambil meski tanpa sharing publik.</p>
+      </div>` : '';
+
+    const gasNote = gasErr
+      ? `<p style="margin-top:6px;font-size:.75rem;color:#92400E">GAS error: ${gasErr}</p>`
+      : (CFG.gasUrl ? '' : `<p style="margin-top:10px;font-size:.78rem;color:#6B7280">💡 <strong>Tip:</strong> Isi URL Google Apps Script di Pengaturan sebagai fallback otomatis agar data tetap tampil meski spreadsheet tidak publik.</p>`);
+
     inner.innerHTML = `
       <div class="loader-logo" style="background:#DC2626"><span class="material-icons-round">error_outline</span></div>
       <div class="error-box">
-        <strong>⚠️ Gagal memuat data dari Google Sheets</strong>
-        <p>Langkah perbaikan:</p>
-        <ol>
-          <li>Buka spreadsheet → klik <strong>Share</strong></li>
-          <li>Ubah ke <strong>"Anyone with the link → Viewer"</strong></li>
-          <li>Klik <strong>Done</strong>, lalu refresh halaman</li>
-          <li>Cek Spreadsheet ID & GID di Pengaturan</li>
-        </ol>
-        <code>Error: ${msg||'Network/CORS error'}</code>
+        <strong>⚠️ Gagal memuat data</strong>
+        <code style="margin-bottom:10px">Error: ${csvErr||'Network/CORS error'}</code>
+        ${fix403}
+        ${gasNote}
       </div>
-      <button onclick="location.reload()" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:var(--primary);color:#fff;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);font-size:.875rem;margin-top:4px">
-        <span class="material-icons-round" style="font-size:18px">refresh</span>Coba Lagi
-      </button>`;
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px">
+        <button onclick="location.reload()" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:var(--primary);color:#fff;border-radius:8px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);font-size:.875rem">
+          <span class="material-icons-round" style="font-size:18px">refresh</span>Coba Lagi
+        </button>
+        <button onclick="Fetcher._goSettings()" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:#F1F5F9;color:#334155;border-radius:8px;font-weight:700;cursor:pointer;border:1px solid #CBD5E1;font-family:var(--font);font-size:.875rem">
+          <span class="material-icons-round" style="font-size:18px">settings</span>Buka Pengaturan
+        </button>
+      </div>`;
+  },
+
+  // Tombol "Buka Pengaturan" dari layar error
+  _goSettings() {
+    const loader = $('appLoader');
+    loader.classList.add('fade-out');
+    setTimeout(() => loader.style.display='none', 400);
+    $('appShell').classList.remove('hidden');
+    // Render minimal agar tidak crash
+    if (!State.allData.length) {
+      State.allData = [];
+      App.populateFilters();
+      Table.applyFilters();
+      Rekap.render();
+      App.renderStats();
+      SyncBar.setError();
+    }
+    App.switchView('pengaturan');
   }
 };
 
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    APP CONTROLLER
-════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════ */
 const App = {
   async init() {
     App.loadConfig();
@@ -921,11 +1166,21 @@ const App = {
     App.bindEvents();
     Settings.loadToUI();
     const data = await Fetcher.load();
-    if(data){ State.allData=data; App.onLoaded(); }
+    if (data) { State.allData = data; App.onLoaded(); }
   },
 
   loadConfig() {
-    try { const c=localStorage.getItem('smk-cfg'); if(c){Object.assign(CFG,JSON.parse(c));} } catch(e){}
+    try {
+      const c = localStorage.getItem('smk-cfg');
+      if (c) {
+        const saved = JSON.parse(c);
+        // Jika sheetId berubah (migrasi spreadsheet), hapus cache CSV lama
+        if (saved.sheetId && saved.sheetId !== CFG.sheetId) {
+          Cache.clear();
+        }
+        Object.assign(CFG, saved);
+      }
+    } catch(e) {}
   },
 
   bindEvents() {
@@ -940,19 +1195,28 @@ const App = {
       Table.applyFilters();
       App.switchView('data-siswa');
     });
-    $('refreshDataBtn')?.addEventListener('click', async()=>{
-      Toast.show('Memuat ulang dari Google Sheets...','info');
-      const data=await Fetcher.load();
-      if(data){ State.allData=data; App.onLoaded(true); Toast.show(`Berhasil: ${data.length} siswa dimuat`,'success'); }
-    });
+    $('refreshDataBtn')?.addEventListener('click', ()=>App.forceRefresh());
     $('darkModeToggle')?.addEventListener('click', App.toggleDarkMode);
     document.addEventListener('keydown', e=>{
-      if(e.key==='Escape'){App.closeModal();App.closeConfirm();App.closeDetail();}
+      if(e.key==='Escape'){App.closeDetail();App.closeConfirm();}
     });
   },
 
+  // ✅ Force refresh: hapus cache, ambil ulang dari Sheets
+  async forceRefresh() {
+    Cache.clear();
+    SyncBar.setLoading();
+    Toast.show('Mengambil data terbaru dari Google Sheets...','info');
+    const data = await Fetcher.load(true);
+    if (data) {
+      State.allData = data;
+      App.onLoaded(true);
+      Toast.show(`✓ Data diperbarui: ${data.length} siswa`, 'success');
+    }
+  },
+
   onLoaded(isRefresh=false) {
-    if(!isRefresh){
+    if (!isRefresh) {
       const l=$('appLoader'); l.classList.add('fade-out');
       setTimeout(()=>l.style.display='none',400);
       $('appShell').classList.remove('hidden');
@@ -963,17 +1227,24 @@ const App = {
     InputNilai.populateSiswa();
     Rekap.render();
     App.renderStats();
+    SyncBar.update();
+
+    // ── Tampilkan/sembunyikan banner sharing warning di Data Siswa
+    const banner = $('sharingWarningBanner');
+    if (banner) {
+      banner.style.display = State.sharingWarning ? 'flex' : 'none';
+    }
   },
 
   renderStats() {
-    const pm={},km={};
+    const pm={}, km={};
     State.allData.forEach(s=>{
       if(s.prodi) pm[s.prodi]=(pm[s.prodi]||0)+1;
       if(s.kelas) km[s.kelas]=(km[s.kelas]||0)+1;
     });
-    $('statTotalSiswa').textContent=State.allData.length;
-    $('statTotalProdi').textContent=Object.keys(pm).length;
-    $('statTotalKelas').textContent=Object.keys(km).length;
+    $('statTotalSiswa').textContent = State.allData.length;
+    $('statTotalProdi').textContent = Object.keys(pm).length;
+    $('statTotalKelas').textContent = Object.keys(km).length;
     Dashboard.renderBreakdown('prodiBreakdown', Object.entries(pm).map(([nama,jumlah])=>({nama,jumlah})), 'nama', State.allData.length);
     Dashboard.renderBreakdown('kelasBreakdown', Object.entries(km).map(([kelas,jumlah])=>({kelas,jumlah})), 'kelas', State.allData.length);
   },
@@ -982,7 +1253,7 @@ const App = {
     ['filterKelas','nilaiFilterKelas'].forEach(id=>{
       const el=$(id); if(!el)return;
       const v=el.value;
-      el.innerHTML = id==='nilaiFilterKelas' ? '<option value="">Pilih Kelas...</option>' : '<option value="">Semua Kelas</option>';
+      el.innerHTML = id==='nilaiFilterKelas'?'<option value="">Pilih Kelas...</option>':'<option value="">Semua Kelas</option>';
       const ks=new Set(State.allData.map(s=>s.kelas).filter(Boolean).sort());
       ks.forEach(k=>{const o=document.createElement('option');o.value=o.textContent=k;el.appendChild(o);});
       el.value=v;
@@ -999,71 +1270,11 @@ const App = {
     $$('.nav-item').forEach(el=>el.classList.remove('active'));
     $(`view-${v}`)?.classList.add('active');
     document.querySelector(`[data-view="${v}"]`)?.classList.add('active');
-    const labels={
-      dashboard:'Dashboard','data-siswa':'Data Siswa',
-      'nilai-semester':'Nilai Semester','input-nilai':'Input Nilai (GAS)',
-      'rekap-prodi':'Rekap per Prodi','pengaturan':'Pengaturan'
-    };
+    const labels={dashboard:'Dashboard','data-siswa':'Data Siswa','nilai-semester':'Nilai Semester','input-nilai':'Input Nilai (GAS)','rekap-prodi':'Rekap per Prodi','pengaturan':'Pengaturan'};
     $('breadcrumbText').textContent=labels[v]||v;
     $('sidebar').classList.remove('mobile-open');
     if(v==='rekap-prodi') Rekap.render();
     if(v==='input-nilai') InputNilai.checkGasStatus();
-  },
-
-  openModal(mode, rowData=null) {
-    $('modalTitle').textContent = mode==='add' ? 'Tambah Siswa Baru' : 'Edit Data Siswa';
-    $('submitBtnText').textContent = mode==='add' ? 'Simpan Data' : 'Simpan Perubahan';
-    Modal.populateKelas([...KELAS_LIST]);
-    mode==='add' ? Modal.resetForm() : Modal.fillForm(rowData);
-    $('modalOverlay').classList.remove('hidden');
-    document.body.style.overflow='hidden';
-    setTimeout(()=>$('formNIS')?.focus(),80);
-  },
-  closeModal() { $('modalOverlay').classList.add('hidden'); document.body.style.overflow=''; },
-  closeModalOutside(e) { if(e.target===$('modalOverlay')) App.closeModal(); },
-
-  async submitForm() {
-    if(!Modal.validate()) return;
-    const p = Modal.collectForm();
-    const isEdit = !!p._rowIndex;
-    if(isEdit){
-      const i=State.allData.findIndex(s=>s._rowIndex===p._rowIndex);
-      if(i!==-1) State.allData[i]={...State.allData[i],...p};
-    } else {
-      State.allData.push({...p, _rowIndex:Date.now(), no:State.allData.length+1});
-    }
-    App.closeModal();
-    App.populateFilters();
-    Table.applyFilters();
-    App.renderStats();
-    Rekap.render();
-    InputNilai.populateSiswa();
-    Toast.show(isEdit ? 'Data diperbarui di sesi ini.' : 'Siswa ditambahkan ke sesi ini.', 'success');
-
-    // Sinkron ke GAS jika dikonfigurasi — ✅ menggunakan GAS.send (GET + payload)
-    if(CFG.gasUrl && p.nis) {
-      try {
-        const result = await GAS.send(isEdit ? 'updateSiswa' : 'addSiswa', {
-          no: p.no, nis: p.nis, nisn: p.nisn, nama: p.nama, prodi: p.prodi, kelas: p.kelas
-        });
-        Toast.show('✓ ' + (result.message || 'Data siswa tersimpan ke Google Sheets!'), 'success');
-      } catch(e) {
-        Toast.show('⚠️ Gagal sinkron ke GAS: ' + e.message, 'warning');
-      }
-    }
-  },
-
-  openConfirm(ri, nama) {
-    $('confirmMessage').textContent=`Data "${nama}" akan dihapus dari tampilan.`;
-    $('confirmOverlay').classList.remove('hidden');
-    document.body.style.overflow='hidden';
-    $('confirmOkBtn').onclick=()=>{App.closeConfirm();App.doDelete(ri,nama);};
-  },
-  closeConfirm() { $('confirmOverlay').classList.add('hidden'); document.body.style.overflow=''; },
-  doDelete(ri, nama) {
-    State.allData=State.allData.filter(s=>s._rowIndex!==ri);
-    Table.applyFilters(); App.renderStats(); Rekap.render(); InputNilai.populateSiswa();
-    Toast.show(`"${nama}" dihapus dari tampilan sesi ini.`,'success');
   },
 
   openDetail(ri) {
@@ -1075,6 +1286,7 @@ const App = {
   },
   closeDetail() { $('detailOverlay').classList.add('hidden'); document.body.style.overflow=''; },
   closeDetailOutside(e) { if(e.target===$('detailOverlay')) App.closeDetail(); },
+  closeConfirm() { $('confirmOverlay').classList.add('hidden'); document.body.style.overflow=''; },
 
   toggleDarkMode() {
     State.isDark=!State.isDark;
@@ -1088,7 +1300,7 @@ const App = {
   },
 
   exportCSV() {
-    if(!State.filteredData.length){ Toast.show('Tidak ada data untuk diekspor.','warning'); return; }
+    if(!State.filteredData.length){ Toast.show('Tidak ada data.','warning'); return; }
     const h=['No','NIS','NISN','Nama Siswa','Program Keahlian','Kelas'];
     const rows=State.filteredData.map(s=>[s.no,s.nis,s.nisn,s.nama,s.prodi,s.kelas].map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','));
     const blob=new Blob(['\uFEFF'+[h.join(','),...rows].join('\n')],{type:'text/csv;charset=utf-8;'});
@@ -1099,9 +1311,100 @@ const App = {
   }
 };
 
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
+   SYNC STATUS BAR
+══════════════════════════════════════════════════════════════ */
+const SyncBar = {
+  update() {
+    const bar = $('syncBar');
+    if (!bar) return;
+    bar.style.display = 'flex';
+
+    const dot   = $('syncDot');
+    const badge = $('syncSourceBadge');
+    const text  = $('lastSyncText');
+    const count = $('syncRowCount');
+
+    count.textContent = `${State.allData.length} siswa`;
+
+    if (State.dataSource === 'live') {
+      dot.className = 'sync-dot ok';
+      badge.innerHTML = '<span class="source-badge source-live"><span class="material-icons-round">cloud_done</span>Live · Google Sheets</span>';
+      text.textContent = `Diambil ${Cache.ageText(State.lastSyncTime)}`;
+
+    } else if (State.dataSource === 'cache') {
+      dot.className = 'sync-dot warn';
+      badge.innerHTML = '<span class="source-badge source-cache"><span class="material-icons-round">cached</span>Dari cache</span>';
+      text.textContent = `Cache: ${Cache.ageText(State.lastSyncTime)} · Klik Refresh untuk data terbaru`;
+
+    } else if (State.dataSource === 'gas') {
+      // ── Data dari GAS (fallback 403) ──────────────────────────
+      dot.className = 'sync-dot ok';
+      if (State.sharingWarning) {
+        // 403: identitas berhasil via GAS, tapi TANPA nilai semester
+        dot.className = 'sync-dot warn';
+        badge.innerHTML = '<span class="source-badge source-cache"><span class="material-icons-round">warning</span>Via GAS (tanpa nilai)</span>';
+        text.textContent = '⚠️ Spreadsheet belum publik → nilai semester tidak tersedia · Buka Pengaturan untuk panduan';
+        // Toast sekali saja
+        if (!SyncBar._warnShown) {
+          SyncBar._warnShown = true;
+          setTimeout(()=>Toast.show(
+            '⚠️ Spreadsheet belum diset publik. Data identitas siswa berhasil dimuat via GAS, tapi nilai semester tidak tersedia. Buka Pengaturan untuk panduan.',
+            'warning', 8000
+          ), 500);
+        }
+      } else {
+        badge.innerHTML = '<span class="source-badge source-live"><span class="material-icons-round">cloud_done</span>Via GAS (live)</span>';
+        text.textContent = `Diambil via GAS ${Cache.ageText(State.lastSyncTime)}`;
+      }
+    }
+
+    // Perbarui teks age setiap 30 detik
+    clearInterval(SyncBar._timer);
+    SyncBar._timer = setInterval(()=>{
+      if (!State.lastSyncTime) return;
+      const age = Cache.ageText(State.lastSyncTime);
+      if (State.dataSource === 'live') {
+        $('lastSyncText').textContent = `Diambil ${age}`;
+      } else if (State.dataSource === 'cache') {
+        $('lastSyncText').textContent = `Cache: ${age} · Klik Refresh untuk data terbaru`;
+      } else if (State.dataSource === 'gas' && !State.sharingWarning) {
+        $('lastSyncText').textContent = `Diambil via GAS ${age}`;
+      }
+    }, 30000);
+  },
+
+  setLoading() {
+    const bar = $('syncBar');
+    if (bar) bar.style.display = 'flex';
+    const dot = $('syncDot');
+    if (dot) dot.className = 'sync-dot warn pulse';
+    const text = $('lastSyncText');
+    if (text) text.textContent = 'Mengambil data dari Google Sheets...';
+    const badge = $('syncSourceBadge');
+    if (badge) badge.innerHTML = '<span class="source-badge source-cache"><span class="material-icons-round">sync</span>Memuat...</span>';
+  },
+
+  setError() {
+    const bar = $('syncBar');
+    if (bar) bar.style.display = 'flex';
+    const dot = $('syncDot');
+    if (dot) dot.className = 'sync-dot err';
+    const badge = $('syncSourceBadge');
+    if (badge) badge.innerHTML = '<span class="source-badge" style="background:#FEF2F2;color:#DC2626;border-color:#FECACA"><span class="material-icons-round">error</span>Gagal memuat</span>';
+    const text = $('lastSyncText');
+    if (text) text.textContent = 'Periksa konfigurasi di Pengaturan';
+    const count = $('syncRowCount');
+    if (count) count.textContent = '0 siswa';
+  },
+
+  _timer: null,
+  _warnShown: false
+};
+
+/* ══════════════════════════════════════════════════════════════
    TABLE MODULE
-════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════ */
 const Table = {
   onSearch(q){ State.searchQuery=q.toLowerCase().trim(); State.currentPage=1; Table.applyFilters(); },
   onFilterKelas(v){ State.filterKelas=v; State.currentPage=1; Table.applyFilters(); },
@@ -1130,13 +1433,8 @@ const Table = {
     State.sortCol=col;
     $$('.data-table th.sortable').forEach(th=>{
       th.classList.remove('sort-asc','sort-desc');
-      if(th.dataset.col===col){
-        th.classList.add(State.sortDir==='asc'?'sort-asc':'sort-desc');
-        const ic=th.querySelector('.sort-icon');
-        if(ic)ic.textContent=State.sortDir==='asc'?'arrow_upward':'arrow_downward';
-      } else {
-        const ic=th.querySelector('.sort-icon'); if(ic)ic.textContent='unfold_more';
-      }
+      if(th.dataset.col===col){th.classList.add(State.sortDir==='asc'?'sort-asc':'sort-desc');const ic=th.querySelector('.sort-icon');if(ic)ic.textContent=State.sortDir==='asc'?'arrow_upward':'arrow_downward';}
+      else{const ic=th.querySelector('.sort-icon');if(ic)ic.textContent='unfold_more';}
     });
     Table.applyFilters();
   },
@@ -1144,7 +1442,7 @@ const Table = {
     const {filteredData:fd,currentPage:cp,perPage:pp}=State;
     const total=Math.max(1,Math.ceil(fd.length/pp));
     State.currentPage=Math.min(cp,total);
-    const s=(State.currentPage-1)*pp, e=s+pp;
+    const s=(State.currentPage-1)*pp,e=s+pp;
     Table.renderRows(fd.slice(s,e),s);
     Table.renderPagination(total);
     $('paginationInfo').textContent=fd.length?`Menampilkan ${s+1}–${Math.min(e,fd.length)} dari ${fd.length}`:'';
@@ -1158,8 +1456,6 @@ const Table = {
     const f=document.createDocumentFragment();
     rows.forEach((s,i)=>{
       const tr=document.createElement('tr');
-      const safeNama=s.nama.replace(/'/g,"\\'").replace(/"/g,'&quot;');
-      const safeData=JSON.stringify(s).replace(/"/g,'&quot;');
       tr.innerHTML=`
         <td class="text-muted text-sm">${offset+i+1}</td>
         <td><span class="cell-nis">${s.nis||'—'}</span></td>
@@ -1169,8 +1465,6 @@ const Table = {
         <td><span class="cell-kelas">${s.kelas||'—'}</span></td>
         <td class="td-aksi"><div class="action-group">
           <button class="btn-sm btn-detail" onclick="App.openDetail(${s._rowIndex})"><span class="material-icons-round">visibility</span>Detail</button>
-          <button class="btn-sm btn-edit" onclick="App.openModal('edit',${safeData})"><span class="material-icons-round">edit</span></button>
-          <button class="btn-sm btn-delete" onclick="App.openConfirm(${s._rowIndex},'${safeNama}')"><span class="material-icons-round">delete</span></button>
         </div></td>`;
       f.appendChild(tr);
     });
@@ -1196,143 +1490,12 @@ const Table = {
   setPerPage(v){ State.perPage=Number(v);State.currentPage=1;Table.renderPage(); },
 };
 
-/* ════════════════════════════════════════════
-   MODAL MODULE
-════════════════════════════════════════════ */
-const Modal = {
-  _semData: {},
-
-  populateKelas(list) {
-    const el=$('formKelas'); if(!el)return;
-    const v=el.value;
-    el.innerHTML='<option value="">— Pilih Kelas —</option>';
-    list.forEach(k=>{const o=document.createElement('option');o.value=o.textContent=k;el.appendChild(o);});
-    if(list.includes(v)) el.value=v;
-  },
-
-  onProdiChange(v) {
-    Modal.populateKelas(v?(PRODI_KELAS[v]||KELAS_LIST):KELAS_LIST);
-  },
-
-  resetForm() {
-    $('siswaForm').reset();
-    $('formRowIndex').value='';
-    $('formNo').value='';
-    $('formKelas').innerHTML='<option value="">— Pilih Kelas —</option>';
-    KELAS_LIST.forEach(k=>{const o=document.createElement('option');o.value=o.textContent=k;$('formKelas').appendChild(o);});
-    Modal._semData={};
-    Modal.clearErr();
-    Modal.renderSem(1,null);
-    Modal.activateSemTab(1);
-    State.currentSemTab=1;
-  },
-
-  fillForm(d) {
-    $('formRowIndex').value=d._rowIndex||'';
-    $('formNo').value=d.no||'';
-    $('formNIS').value=d.nis||'';
-    $('formNISN').value=d.nisn||'';
-    $('formNama').value=d.nama||'';
-    $('formProdi').value=d.prodi||'';
-    Modal.onProdiChange(d.prodi||'');
-    $('formKelas').value=d.kelas||'';
-    Modal._semData={};
-    for(let s=1;s<=6;s++) Modal._semData[s]={...(d[`semester${s}`]||{})};
-    Modal.clearErr();
-    Modal.renderSem(1,Modal._semData[1]);
-    Modal.activateSemTab(1);
-    State.currentSemTab=1;
-  },
-
-  saveCurrentSemValues(sem) {
-    const saved={};
-    $$(`#semesterFieldsContainer input[data-sem="${sem}"]`).forEach(inp=>{
-      if(inp.dataset.mapel==='Rata-Rata') return;
-      const v=inp.value.trim();
-      saved[inp.dataset.mapel]=v===''?null:parseFloat(v);
-    });
-    if(!Modal._semData[sem]) Modal._semData[sem]={};
-    Object.assign(Modal._semData[sem],saved);
-  },
-
-  renderSem(sem, data) {
-    const ml=MAPEL(sem)||[];
-    const sd=data||{};
-    const c=$('semesterFieldsContainer'); c.innerHTML='';
-    const g=document.createElement('div'); g.className='semester-fields';
-    ml.forEach(m=>{
-      const div=document.createElement('div'); div.className='form-group';
-      const lbl=document.createElement('label'); lbl.textContent=m;
-      const inp=document.createElement('input');
-      inp.type='number'; inp.min='0'; inp.max='100'; inp.step='0.01';
-      inp.placeholder='0–100';
-      inp.dataset.mapel=m; inp.dataset.sem=sem;
-      if(m==='Rata-Rata'){ inp.readOnly=true; inp.placeholder='Auto'; }
-      const v=sd[m];
-      if(v!==null&&v!==undefined&&v!=='') inp.value=v;
-      if(m!=='Rata-Rata') inp.addEventListener('input',()=>Modal.recalcRata(sem));
-      div.appendChild(lbl); div.appendChild(inp);
-      g.appendChild(div);
-    });
-    c.appendChild(g);
-    Modal.recalcRata(sem);
-  },
-
-  recalcRata(sem) {
-    const inputs=$$(`#semesterFieldsContainer input[data-sem="${sem}"]`);
-    const vals=[]; inputs.forEach(inp=>{ if(inp.dataset.mapel==='Rata-Rata') return; const v=inp.value.trim(); if(v!=='') vals.push(parseFloat(v)||0); });
-    const ri=[...inputs].find(i=>i.dataset.mapel==='Rata-Rata'); if(!ri) return;
-    if(vals.length===0){ ri.value=''; return; }
-    ri.value=Math.round((vals.reduce((a,b)=>a+b,0)/vals.length)*100)/100;
-  },
-
-  switchSemTab(sem) {
-    Modal.saveCurrentSemValues(State.currentSemTab);
-    State.currentSemTab=sem;
-    Modal.activateSemTab(sem);
-    Modal.renderSem(sem,Modal._semData[sem]||{});
-  },
-
-  activateSemTab(sem) {
-    $$('.sem-tab').forEach(t=>t.classList.toggle('active',Number(t.dataset.sem)===sem));
-  },
-
-  validate() {
-    Modal.clearErr(); let ok=true;
-    if(!$('formNIS').value.trim()){ $('errNIS').textContent='NIS wajib diisi'; $('formNIS').classList.add('error'); ok=false; }
-    if(!$('formNama').value.trim()){ $('errNama').textContent='Nama wajib diisi'; $('formNama').classList.add('error'); ok=false; }
-    if(!$('formKelas').value.trim()){ $('errKelas').textContent='Kelas wajib diisi'; $('formKelas').classList.add('error'); ok=false; }
-    if(!ok) Toast.show('Harap lengkapi field yang diperlukan.','warning');
-    return ok;
-  },
-
-  clearErr() {
-    ['errNIS','errNama','errKelas'].forEach(id=>{const e=$(id);if(e)e.textContent='';});
-    $$('#siswaForm .error').forEach(el=>el.classList.remove('error'));
-  },
-
-  collectForm() {
-    Modal.saveCurrentSemValues(State.currentSemTab);
-    const ri=Number($('formRowIndex').value)||null;
-    const p={
-      _rowIndex:ri, no:Number($('formNo').value)||null,
-      nis:$('formNIS').value.trim(), nisn:$('formNISN').value.trim(),
-      nama:$('formNama').value.trim(), prodi:$('formProdi').value, kelas:$('formKelas').value.trim()
-    };
-    for(let s=1;s<=6;s++){
-      const existing=ri?(State.allData.find(x=>x._rowIndex===ri)||{})[`semester${s}`]||{}:{};
-      p[`semester${s}`]={...existing,...(Modal._semData[s]||{})};
-    }
-    return p;
-  }
-};
-
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    DASHBOARD MODULE
-════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════ */
 const Dashboard = {
   renderBreakdown(id,items,lk,total) {
-    const c=$(id); if(!c||!items) return;
+    const c=$(id); if(!c||!items)return;
     c.innerHTML=[...items].sort((a,b)=>b.jumlah-a.jumlah).map(it=>{
       const pct=total>0?Math.round((it.jumlah/total)*100):0;
       return `<div class="breakdown-item">
@@ -1346,9 +1509,9 @@ const Dashboard = {
   }
 };
 
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    NILAI SEMESTER VIEW
-════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════ */
 const Nilai = {
   populateKelas() {
     const el=$('nilaiFilterKelas'); if(!el)return;
@@ -1376,7 +1539,7 @@ const Nilai = {
     }).join('');
     w.innerHTML=`<table class="data-table nilai-table"><thead><tr><th class="th-nama">Nama Siswa</th><th class="th-kelas">Kelas</th>${hdr}</tr></thead><tbody>${rows}</tbody></table>`;
   },
-  exportExcel() {
+  exportCSV() {
     const kelas=$('nilaiFilterKelas').value, sem=Number($('nilaiSemester').value);
     if(!kelas){ Toast.show('Pilih kelas terlebih dahulu.','warning'); return; }
     const d=State.allData.filter(s=>s.kelas===kelas);
@@ -1386,15 +1549,14 @@ const Nilai = {
     const rows=d.map(s=>{const sd=s[`semester${sem}`]||{};return[s.nama,s.kelas,...ml.map(m=>sd[m]??'')].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',');});
     const blob=new Blob(['\uFEFF'+[h.join(','),...rows].join('\n')],{type:'text/csv;charset=utf-8;'});
     const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`nilai-${kelas}-sem${sem}.csv`});
-    a.click();
-    Toast.show('Export berhasil.','success');
+    a.click(); Toast.show('Export berhasil.','success');
   }
 };
 
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    INPUT NILAI VIA GAS
-   ✅ FIX: Menggunakan GAS.send() (GET + payload) bukan POST
-════════════════════════════════════════════ */
+   ✅ Setelah simpan: auto-refresh data agar semua user dapat update
+══════════════════════════════════════════════════════════════ */
 const InputNilai = {
   _currentSiswa: null,
 
@@ -1419,15 +1581,8 @@ const InputNilai = {
 
   onSiswaChange() {
     const ri=Number($('gasFilterSiswa').value);
-    if(!ri){
-      InputNilai._currentSiswa=null;
-      $('gasNilaiForm').style.display='none';
-      $('gasNilaiEmpty').style.display='block';
-      $('gasSelectedInfo').style.display='none';
-      return;
-    }
-    const s=State.allData.find(x=>x._rowIndex===ri);
-    if(!s) return;
+    if(!ri){ InputNilai._currentSiswa=null; $('gasNilaiForm').style.display='none'; $('gasNilaiEmpty').style.display='block'; $('gasSelectedInfo').style.display='none'; return; }
+    const s=State.allData.find(x=>x._rowIndex===ri); if(!s)return;
     InputNilai._currentSiswa=s;
     $('gasSelectedNama').textContent=s.nama;
     $('gasSelectedNIS').textContent=s.nis||'—';
@@ -1438,12 +1593,10 @@ const InputNilai = {
     InputNilai.renderFields();
   },
 
-  onSemesterChange() {
-    if(InputNilai._currentSiswa) InputNilai.renderFields();
-  },
+  onSemesterChange() { if(InputNilai._currentSiswa) InputNilai.renderFields(); },
 
   renderFields() {
-    const s=InputNilai._currentSiswa; if(!s) return;
+    const s=InputNilai._currentSiswa; if(!s)return;
     const sem=Number($('gasSemester').value);
     const ml=MAPEL(sem)||[];
     const sd=s[`semester${sem}`]||{};
@@ -1454,12 +1607,10 @@ const InputNilai = {
       const inp=document.createElement('input');
       inp.type='number'; inp.min='0'; inp.max='100'; inp.step='0.01';
       inp.placeholder='0–100'; inp.dataset.mapel=m;
-      if(m==='Rata-Rata'){ inp.readOnly=true; inp.placeholder='Auto'; }
-      const v=sd[m];
-      if(v!==null&&v!==undefined&&v!=='') inp.value=v;
+      if(m==='Rata-Rata'){inp.readOnly=true;inp.placeholder='Auto';}
+      const v=sd[m]; if(v!==null&&v!==undefined&&v!=='')inp.value=v;
       if(m!=='Rata-Rata') inp.addEventListener('input',()=>InputNilai.recalcRata());
-      div.appendChild(lbl); div.appendChild(inp);
-      c.appendChild(div);
+      div.appendChild(lbl); div.appendChild(inp); c.appendChild(div);
     });
     InputNilai.recalcRata();
     $('gasSaveStatus').textContent='';
@@ -1467,9 +1618,9 @@ const InputNilai = {
 
   recalcRata() {
     const inputs=$$('#gasNilaiFields input');
-    const vals=[]; inputs.forEach(inp=>{ if(inp.dataset.mapel==='Rata-Rata') return; const v=inp.value.trim(); if(v!=='') vals.push(parseFloat(v)||0); });
-    const ri=[...inputs].find(i=>i.dataset.mapel==='Rata-Rata'); if(!ri) return;
-    if(!vals.length){ ri.value=''; return; }
+    const vals=[]; inputs.forEach(inp=>{if(inp.dataset.mapel==='Rata-Rata')return;const v=inp.value.trim();if(v!=='')vals.push(parseFloat(v)||0);});
+    const ri=[...inputs].find(i=>i.dataset.mapel==='Rata-Rata'); if(!ri)return;
+    if(!vals.length){ri.value='';return;}
     ri.value=Math.round((vals.reduce((a,b)=>a+b,0)/vals.length)*100)/100;
   },
 
@@ -1478,33 +1629,18 @@ const InputNilai = {
   async saveNilai() {
     const s=InputNilai._currentSiswa;
     if(!s){ Toast.show('Pilih siswa terlebih dahulu.','warning'); return; }
-    if(!s.nis){ Toast.show('Siswa tidak memiliki NIS, tidak bisa simpan ke Sheets.','error'); return; }
+    if(!s.nis){ Toast.show('Siswa tidak memiliki NIS.','error'); return; }
 
     const sem=Number($('gasSemester').value);
     const nilai={};
     $$('#gasNilaiFields input').forEach(inp=>{
-      const v=inp.value.trim();
-      if(v!=='') nilai[inp.dataset.mapel]=parseFloat(v);
+      const v=inp.value.trim(); if(v!=='') nilai[inp.dataset.mapel]=parseFloat(v);
     });
 
-    // Validasi: minimal ada 1 nilai yang diisi
-    const nonRata = Object.entries(nilai).filter(([k]) => k !== 'Rata-Rata');
-    if(!nonRata.length){
-      Toast.show('Isi minimal 1 nilai sebelum menyimpan.','warning');
-      return;
-    }
+    const nonRata=Object.entries(nilai).filter(([k])=>k!=='Rata-Rata');
+    if(!nonRata.length){ Toast.show('Isi minimal 1 nilai.','warning'); return; }
 
-    // Update state lokal terlebih dahulu
-    if(!s[`semester${sem}`]) s[`semester${sem}`]={};
-    Object.assign(s[`semester${sem}`],nilai);
-    Table.applyFilters();
-    Nilai.onFilterChange();
-
-    // Kirim ke GAS jika dikonfigurasi
-    if(!CFG.gasUrl){
-      Toast.show('Data diperbarui di sesi ini saja (GAS belum dikonfigurasi).','warning');
-      return;
-    }
+    if(!CFG.gasUrl){ Toast.show('GAS belum dikonfigurasi — buka Pengaturan.','warning'); return; }
 
     const btn=$('gasSaveBtn');
     const statusEl=$('gasSaveStatus');
@@ -1514,22 +1650,24 @@ const InputNilai = {
     statusEl.style.color='var(--info)';
 
     try {
-      // ✅ FIX: Gunakan GAS.send (GET + payload) bukan POST
-      const result = await GAS.send('updateNilai', {
-        nis      : s.nis,
-        semester : sem,
-        nilai    : nilai
-      });
-
-      statusEl.textContent='✓ ' + (result.message || 'Tersimpan ke Google Sheets!');
+      const result = await GAS.send('updateNilai',{ nis:s.nis, semester:sem, nilai });
+      statusEl.textContent='✓ '+(result.message||'Tersimpan!');
       statusEl.style.color='var(--success)';
-      Toast.show(`✓ Nilai Sem-${sem} ${s.nama} tersimpan ke Sheets!`, 'success');
-      setTimeout(()=>{ statusEl.textContent=''; }, 5000);
+      Toast.show(`✓ Nilai Sem-${sem} ${s.nama} tersimpan ke Sheets!`,'success');
+
+      // ✅ Refresh otomatis setelah 2 detik agar semua user melihat data terbaru
+      setTimeout(async()=>{
+        Toast.show('Memperbarui tampilan...','info',2000);
+        Cache.clear();
+        const data=await Fetcher.load(true);
+        if(data){ State.allData=data; App.onLoaded(true); InputNilai.populateSiswa(); }
+        statusEl.textContent='';
+      }, 2000);
 
     } catch(e) {
-      statusEl.textContent='✗ Gagal: ' + e.message;
+      statusEl.textContent='✗ Gagal: '+e.message;
       statusEl.style.color='var(--danger)';
-      Toast.show('✗ Gagal kirim ke GAS: '+e.message, 'error');
+      Toast.show('✗ Gagal: '+e.message,'error');
     } finally {
       btn.disabled=false;
       btn.innerHTML='<span class="material-icons-round">save</span>Simpan ke Spreadsheet';
@@ -1537,14 +1675,14 @@ const InputNilai = {
   }
 };
 
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    REKAP PRODI
-════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════ */
 const Rekap = {
   render() {
-    const c=$('rekapProdiContent'); if(!c||!State.allData.length) return;
+    const c=$('rekapProdiContent'); if(!c||!State.allData.length)return;
     const m={};
-    State.allData.forEach(s=>{ if(!m[s.prodi])m[s.prodi]={}; const k=s.kelas||'?'; m[s.prodi][k]=(m[s.prodi][k]||0)+1; });
+    State.allData.forEach(s=>{if(!m[s.prodi])m[s.prodi]={};const k=s.kelas||'?';m[s.prodi][k]=(m[s.prodi][k]||0)+1;});
     c.innerHTML=Object.entries(m).sort(([a],[b])=>a.localeCompare(b)).map(([prodi,km])=>{
       const t=Object.values(km).reduce((a,b)=>a+b,0);
       const kl=Object.entries(km).sort(([a],[b])=>a.localeCompare(b)).map(([k,n])=>`<div class="rekap-kelas-item"><span class="rekap-kelas-name">${k}</span><span class="rekap-kelas-count">${n} siswa</span></div>`).join('');
@@ -1553,23 +1691,20 @@ const Rekap = {
   }
 };
 
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    DETAIL NILAI
-════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════ */
 const Detail = {
   buildHTML(s) {
     const init=(s.nama||'S').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
     const blocks=[1,2,3,4,5,6].map(sem=>{
-      const d=s[`semester${sem}`]||{}, ml=MAPEL(sem)||[];
+      const d=s[`semester${sem}`]||{},ml=MAPEL(sem)||[];
       const items=ml.map(m=>{
-        const v=d[m]; if(v===null||v===undefined) return '';
+        const v=d[m]; if(v===null||v===undefined)return '';
         return `<div class="detail-nilai-item${m==='Rata-Rata'?' is-rata':''}"><span class="detail-nilai-mapel">${m}</span><span class="detail-nilai-skor">${v}</span></div>`;
       }).filter(Boolean).join('');
-      if(!items) return '';
-      return `<div class="detail-semester-block">
-        <div class="detail-semester-title"><span class="material-icons-round" style="font-size:16px;color:var(--primary)">school</span>Semester ${sem}</div>
-        <div class="detail-nilai-grid">${items}</div>
-      </div>`;
+      if(!items)return '';
+      return `<div class="detail-semester-block"><div class="detail-semester-title"><span class="material-icons-round" style="font-size:16px;color:var(--primary)">school</span>Semester ${sem}</div><div class="detail-nilai-grid">${items}</div></div>`;
     }).filter(Boolean).join('');
     return `<div class="detail-identity">
       <div class="detail-avatar">${init}</div>
@@ -1582,23 +1717,33 @@ const Detail = {
   }
 };
 
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    SETTINGS MODULE
-════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════ */
 const Settings = {
   loadToUI() {
-    $('cfgSheetId').value=CFG.sheetId||'';
-    $('cfgSheetGid').value=CFG.sheetGid||'';
-    $('cfgDataStart').value=CFG.dataStart||3;
-    $('cfgGasUrl').value=CFG.gasUrl||'';
+    $('cfgSheetId').value   = CFG.sheetId   || '';
+    $('cfgSheetGid').value  = CFG.sheetGid  || '';
+    $('cfgDataStart').value = CFG.dataStart || 3;
+    $('cfgGasUrl').value    = CFG.gasUrl    || '';
+    $('cfgCacheTtl').value  = CFG.cacheTtl  || 10;
+    $('cacheTtlDisplay').textContent = (CFG.cacheTtl||10)+' menit';
+    // Tampilkan info spreadsheet aktif
+    const infoEl = $('activeSheetInfo');
+    if (infoEl && CFG.sheetId) {
+      infoEl.textContent = `Spreadsheet aktif: ...${CFG.sheetId.slice(-12)} | GID: ${CFG.sheetGid||'0'}`;
+      infoEl.style.display = 'block';
+    }
   },
   saveSheetConfig() {
-    CFG.sheetId=$('cfgSheetId').value.trim();
-    CFG.sheetGid=$('cfgSheetGid').value.trim();
-    CFG.dataStart=parseInt($('cfgDataStart').value)||3;
+    CFG.sheetId    = $('cfgSheetId').value.trim();
+    CFG.sheetGid   = $('cfgSheetGid').value.trim();
+    CFG.dataStart  = parseInt($('cfgDataStart').value)||3;
+    CFG.cacheTtl   = parseInt($('cfgCacheTtl').value)||10;
     Settings.persist();
-    Toast.show('Konfigurasi disimpan. Memuat ulang data...','info');
-    setTimeout(()=>location.reload(),1000);
+    Cache.clear(); // hapus cache lama agar ambil ulang dengan config baru
+    Toast.show('Konfigurasi disimpan. Memuat ulang...','info');
+    setTimeout(()=>location.reload(),800);
   },
   saveGasConfig() {
     CFG.gasUrl=$('cfgGasUrl').value.trim();
@@ -1612,7 +1757,7 @@ const Settings = {
     el.style.display='flex'; el.className='gas-status gas-warn';
     el.innerHTML='<span class="material-icons-round">sync</span>Menguji koneksi...';
     try{
-      const json=await GAS.get({ action: 'ping' });
+      const json=await GAS.get({ action:'ping' });
       if(json.status==='ok'){
         el.className='gas-status gas-ok';
         el.innerHTML='<span class="material-icons-round">check_circle</span>Terhubung: '+json.message;
@@ -1621,7 +1766,7 @@ const Settings = {
     } catch(e){
       el.className='gas-status gas-err';
       el.innerHTML='<span class="material-icons-round">error</span>Gagal: '+e.message;
-      Toast.show('✗ Gagal terhubung ke GAS: '+e.message,'error');
+      Toast.show('✗ Gagal: '+e.message,'error');
     }
   },
   persist() {
@@ -1629,9 +1774,9 @@ const Settings = {
   }
 };
 
-/* ════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    TOAST MODULE
-════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════ */
 const Toast = {
   ICONS:{success:'check_circle',error:'error',warning:'warning',info:'info'},
   show(msg,type='info',dur=4200) {
@@ -1639,14 +1784,14 @@ const Toast = {
     t.className=`toast toast-${type}`;
     t.innerHTML=`<span class="material-icons-round">${Toast.ICONS[type]||'info'}</span><span>${msg}</span>`;
     c.appendChild(t);
-    setTimeout(()=>{ t.classList.add('removing'); setTimeout(()=>t.remove(),250); },dur);
-    t.addEventListener('click',()=>{ t.classList.add('removing'); setTimeout(()=>t.remove(),250); });
+    setTimeout(()=>{t.classList.add('removing');setTimeout(()=>t.remove(),250);},dur);
+    t.addEventListener('click',()=>{t.classList.add('removing');setTimeout(()=>t.remove(),250);});
   }
 };
 
-// ─── BOOT ───
-window.App=App; window.Table=Table; window.Modal=Modal;
-window.Nilai=Nilai; window.Toast=Toast; window.InputNilai=InputNilai; window.Settings=Settings;
+// ── BOOT
+window.App=App; window.Table=Table; window.Nilai=Nilai;
+window.Toast=Toast; window.InputNilai=InputNilai; window.Settings=Settings;
 App.init();
 </script>
 </body>
